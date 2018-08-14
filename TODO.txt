@@ -1,5 +1,4 @@
 
-implement triangle drawing
 implement position/velocity/acceleration
 implement steering behaviors
     seek and flee

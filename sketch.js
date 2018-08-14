@@ -4,16 +4,19 @@ The engine
 
 // the window where stuff is rendered
 let canvas;
-let WINDOW_WIDTH = 600
-let WINDOW_HEIGHT = 600
+let WINDOW_WIDTH = 600;
+let WINDOW_HEIGHT = 600;
+let WINDOW_CENTER_X = WINDOW_WIDTH / 2;
+let WINDOW_CENTER_Y = WINDOW_HEIGHT / 2;
 
 let game;
 let input;
 
 // p5 function: preload() is called before page starts loading
 function preload() {
-    input = new Input()
-    game = new Game(input);
+    input = new Input();
+    let renderer = new Renderer();
+    game = new Game(input, renderer);
 }
 
 // p5 function: setup() is called on page load
