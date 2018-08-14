@@ -1,7 +1,5 @@
 
-implement position/velocity/acceleration
 implement steering behaviors
-    seek and flee
     pursue and evade
     wander
     arrival

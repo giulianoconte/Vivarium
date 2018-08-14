@@ -18,7 +18,7 @@ class Game {
     }
 
     update() {
-        if (this.input.mouseStatus === 1) {
+        if (this.input.mouseLeftStatus === 1) {
             console.log("ayy");
         }
         for (let i = 0; i < this.entities.length; i++) {

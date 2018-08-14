@@ -1,38 +1,60 @@
 
 class GameObject {
     constructor(x, y) {
-        this.acceleration = createVector(0, 0);
-        this.velocity = createVector(0, 0);
+        this.acceleration = createVector(random(0.2) - 0.1, random(0.2) - 0.1);
+        this.velocity = createVector(random(10) - 5, random(10) - 5);
         this.position = createVector(x, y);
+
+        this.desired = createVector(0, 0);
         
-        this.direction = Math.atan(this.velocity.y/this.velocity.x);
+        this.direction = this.velocity.heading();
         if (isNaN(this.direction)) {
             this.direction = 0;
         }
 
-        let shape = Renderer.SHAPES.SQUARE;
+        let shape = Renderer.SHAPES.CIRCLE;
         let color = createVector(204, 101, 192);
-        this.drawing = new Drawing(shape, 50, color, this.position, this.direction);
+        this.drawing = new Drawing(shape, 10, color, this.position, this.direction);
     }
 
     update() {
-        this.direction += 0.02;
-        while (this.direction >= 2*PI) {
-            this.direction -= 2*PI;
-        }
-        this.drawing.rotation = this.direction;
+        this.act();
+        this.steer();
+        this.updateDrawing();
+    }
 
-        if (this.direction >= 3*PI/2) {
-            this.drawing.shape = Renderer.SHAPES.SQUARE;
-        }
-        else if (this.direction >= 2*PI/2) {
-            this.drawing.shape = Renderer.SHAPES.CIRCLE;
-        }
-        else if (this.direction >= 1*PI/2) {
-            this.drawing.shape = Renderer.SHAPES.TRIANGLE;
-        }
-        else if (this.direction >= 0*PI/2) {
-            this.drawing.shape = Renderer.SHAPES.THIN_TRIANGLE;
-        }
+    act() {
+        this.seek(game.input.mousePosition);
+    }
+
+    steer() {
+        this.acceleration = p5.Vector.sub(this.desired, this.velocity);
+        this.acceleration.normalize();
+        this.acceleration.mult(0.15);
+        // console.log(
+        //     `target: ${game.input.mousePosition} ${"\n"}` +
+        //     `desired: ${this.desired} ${"\n"}` +
+        //     `velocity: ${this.velocity} ${"\n"}` +
+        //     `steering: ${p5.Vector.sub(this.desired, this.velocity)} ${"\n"}` +
+        //     `acceleration: ${this.acceleration}`
+        // )
+        this.velocity.add(this.acceleration);
+        this.position.add(this.velocity);
+    }
+
+    seek(target) {
+        this.desired = p5.Vector.sub(target, this.position);
+        this.desired.setMag(7);
+    }
+
+    flee(target) {
+        this.desired = p5.Vector.sub(target, this.position);
+        this.desired = p5.Vector.mult(this.desired, -1);
+    }
+
+    updateDrawing() {
+        this.drawing.position = this.position;
+        this.direction = this.velocity.heading();
+        this.drawing.rotation = this.direction;
     }
 }
