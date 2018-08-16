@@ -2,7 +2,6 @@
 implement steering behaviors
     pursue and evade
     wander
-    arrival
     separation
     alignment
     cohesion

@@ -8,7 +8,7 @@ class Game {
         this.renderer = renderer;
 
         this.entities = [];
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 1; i++) {
             this.entities.push(new GameObject(random(-WINDOW_CENTER_X, WINDOW_CENTER_X), random(-WINDOW_CENTER_Y, WINDOW_CENTER_Y)));
         }
     }
@@ -23,6 +23,22 @@ class Game {
         }
         for (let i = 0; i < this.entities.length; i++) {
             this.entities[i].update();
+            this.wraparound(this.entities[i]);
+        }
+    }
+
+    wraparound(entity) {
+        if (entity.position.x <= -1 * (WINDOW_CENTER_X + entity.drawing.size)) {
+            entity.position.x += (WINDOW_HEIGHT + entity.drawing.size);
+        }
+        if (entity.position.y <= -1 * (WINDOW_CENTER_Y + entity.drawing.size)) {
+            entity.position.y += (WINDOW_HEIGHT + entity.drawing.size);
+        }
+        if (entity.position.x >= 1 * (WINDOW_CENTER_X + entity.drawing.size)) {
+            entity.position.x -= (WINDOW_HEIGHT + entity.drawing.size);
+        }
+        if (entity.position.y >= 1 * (WINDOW_CENTER_Y + entity.drawing.size)) {
+            entity.position.y -= (WINDOW_HEIGHT + entity.drawing.size);
         }
     }
 
