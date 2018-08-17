@@ -28,10 +28,12 @@ class GameObject {
 
     chooseDesiredVelocity() {
         this.desired = createVector(0, 0);
-        this.separate(game.input.mousePosition);
-        // for (let i = 0; i < game.entities.length; i++) {
-        //     this.separate(game.entities[i].position);
-        // }
+        this.arrive(game.input.mousePosition);
+        this.arrive(game.input.mousePosition);
+        this.flee(game.input.mousePosition);
+        for (let i = 0; i < game.entities.length; i++) {
+            this.separate(game.entities[i].position);
+        }
     }
 
     steer() {
@@ -88,14 +90,16 @@ class GameObject {
     }
 
     separate(target) {
-        let separationDistance = 50;
+        let separationDistance = 5;
         let distance = dist(this.position.x, this.position.y, target.x, target.y);
         let separate = p5.Vector.sub(this.position, target);
         if (distance > 0 && distance < separationDistance) {
-            let speed = map(distance, separationDistance, 0, 0, this.maxSpeed);
+            let speed = map(distance, separationDistance, 0, this.maxSpeed/10, this.maxSpeed);
             separate.setMag(speed);
         }
-        this.logVector("distance", distance);
+        else {
+            separate.setMag(0);
+        }
         this.desired.add(separate);
     }
 
