@@ -5,8 +5,8 @@ class GameObject {
         this.velocity = createVector(random(10) - 5, random(10) - 5);
         this.position = createVector(x, y);
 
-        this.maxSpeed = 7;
-        this.maxForce = 0.15;
+        this.maxSpeed = 15;
+        this.maxForce = 0.35;
 
         this.desired = createVector(0, 0);
         
@@ -17,6 +17,7 @@ class GameObject {
 
         let shape = Renderer.SHAPES.CIRCLE;
         let color = createVector(204, 101, 192);
+        color = createVector(127 - random(127), 100 + 127 - random(127), 200 + random(255-200));
         this.drawing = new Drawing(shape, 10, color, this.position, this.direction);
     }
 
@@ -32,8 +33,14 @@ class GameObject {
         this.arrive(game.input.mousePosition);
         this.flee(game.input.mousePosition);
         for (let i = 0; i < game.entities.length; i++) {
-            this.separate(game.entities[i].position);
+            this.straferate(game.entities[i].position, game.input.mousePosition);
         }
+    }
+
+    alterSeek(target) {
+        let seek = p5.Vector.sub(target, this.position);
+        seek.setMag(this.maxSpeed);
+        this.desired.add(seek);
     }
 
     steer() {
@@ -101,6 +108,33 @@ class GameObject {
             separate.setMag(0);
         }
         this.desired.add(separate);
+    }
+
+    straferate(target, referencePoint) {
+        let separationDistance = 15;
+        let distance = dist(this.position.x, this.position.y, target.x, target.y);
+        
+        let toReferencePoint = p5.Vector.sub(referencePoint, this.position);
+        let toTarget = p5.Vector.sub(target, this.position);
+        let orthogonalToReferencePoint = createVector(-toReferencePoint.y, toReferencePoint.x);
+
+        // dot product:
+        //  positive -> vectors have acute angle
+        //  0 -> vectors are orthogonal
+        //  negative -> vectors have obtuse angle
+        let orthogonalAndToTargetDotProduct = p5.Vector.dot(toTarget, orthogonalToReferencePoint);
+        let straferate = (orthogonalAndToTargetDotProduct >= 0) 
+            ? p5.Vector.mult(orthogonalToReferencePoint, -1)
+            : p5.Vector.mult(orthogonalToReferencePoint, 1);
+
+        if (distance > 0 && distance < separationDistance) {
+            let speed = map(distance, separationDistance, 0, this.maxSpeed/10, this.maxSpeed);
+            straferate.setMag(speed);
+        }
+        else {
+            straferate.setMag(0);
+        }
+        this.desired.add(straferate);
     }
 
     updateDrawing() {

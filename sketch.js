@@ -1,3 +1,5 @@
+/// <reference path="./p5_intellisense/p5.d.ts" />
+/// <reference path="./p5_intellisense/p5.global-mode.d.ts" />
 /*
 The engine
 */
