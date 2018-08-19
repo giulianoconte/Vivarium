@@ -6,14 +6,10 @@ class GameObject {
         this.position = createVector(x, y);
 
         this.maxSpeed = 15;
-        this.maxForce = 0.35;
+        this.maxForce = 0.75;
 
         this.desired = createVector(0, 0);
-        
         this.direction = this.velocity.heading();
-        if (isNaN(this.direction)) {
-            this.direction = 0;
-        }
 
         let shape = Renderer.SHAPES.CIRCLE;
         let color = createVector(204, 101, 192);
@@ -97,7 +93,7 @@ class GameObject {
     }
 
     separate(target) {
-        let separationDistance = 5;
+        let separationDistance = 15;
         let distance = dist(this.position.x, this.position.y, target.x, target.y);
         let separate = p5.Vector.sub(this.position, target);
         if (distance > 0 && distance < separationDistance) {
@@ -111,7 +107,6 @@ class GameObject {
     }
 
     straferate(target, referencePoint) {
-        let separationDistance = 15;
         let distance = dist(this.position.x, this.position.y, target.x, target.y);
         
         let toReferencePoint = p5.Vector.sub(referencePoint, this.position);
@@ -127,8 +122,10 @@ class GameObject {
             ? p5.Vector.mult(orthogonalToReferencePoint, -1)
             : p5.Vector.mult(orthogonalToReferencePoint, 1);
 
+        let separationDistance = 40;
         if (distance > 0 && distance < separationDistance) {
-            let speed = map(distance, separationDistance, 0, this.maxSpeed/10, this.maxSpeed);
+            Renderer.drawLine(this.position, target, createVector(255, 255, 255), 50);
+            let speed = map(distance, separationDistance, 0, 0, this.maxSpeed);
             straferate.setMag(speed);
         }
         else {

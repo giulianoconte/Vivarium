@@ -1,0 +1,4 @@
+
+class Navigator {
+    constructor()
+}

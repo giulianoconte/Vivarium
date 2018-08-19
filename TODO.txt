@@ -1,8 +1,12 @@
 
+move steering behaviors to steering class
+use quadtree for finding neighbors 
+    http://www.mikechambers.com/blog/2011/03/21/javascript-quadtree-implementation/ 
+    https://gamedevelopment.tutsplus.com/tutorials/quick-tip-use-quadtrees-to-detect-likely-collisions-in-2d-space--gamedev-374
+
 implement steering behaviors
     pursue and evade
     wander
-    separation
     alignment
     cohesion
     

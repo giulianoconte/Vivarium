@@ -98,3 +98,8 @@ class Renderer {
 }
 
 Renderer.SHAPES = Object.freeze({ SQUARE: 0, CIRCLE: 1, TRIANGLE: 2, THIN_TRIANGLE: 3});
+
+Renderer.drawLine = function(a, b, color, alpha) {
+    stroke(color.x, color.y, color.z, alpha);
+    line(WINDOW_CENTER_X + a.x, WINDOW_CENTER_Y - a.y, WINDOW_CENTER_X + b.x, WINDOW_CENTER_Y - b.y);
+}
