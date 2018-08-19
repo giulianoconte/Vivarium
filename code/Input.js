@@ -7,12 +7,27 @@ class Input {
         this.mouseIsPressed = false;
         this.mouseIsReleased = false;
         this.mousePosition = createVector(0, 0);
+        this.mousePositionInitialized = false;
     }
 
     update() {
-        this.mousePosition.x = mouseX - WINDOW_CENTER_X;
-        this.mousePosition.y = -(mouseY - WINDOW_CENTER_Y);
-        
+        this.updateMousePosition();
+        this.updateMouseLeftStatus();
+    }
+
+    updateMousePosition() {
+        if (this.mousePositionInitialized === false) {
+            if (mouseX !== 0 || mouseY !== 0) {
+                this.mousePositionInitialized = true;
+            }
+        }
+        else {
+            this.mousePosition.x = mouseX - WINDOW_CENTER_X;
+            this.mousePosition.y = -(mouseY - WINDOW_CENTER_Y);
+        }
+    }
+
+    updateMouseLeftStatus() {
         switch (this.mouseLeftStatus) {
             case 0:
                 if (this.mouseIsPressed === true) {

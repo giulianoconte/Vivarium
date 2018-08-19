@@ -8,7 +8,10 @@ class Game {
         this.renderer = renderer;
 
         this.entities = [];
-        for (let i = 0; i < 30; i++) {
+    }
+
+    initialize() {
+        for (let i = 0; i < 1; i++) {
             this.entities.push(new GameObject(random(-WINDOW_CENTER_X, WINDOW_CENTER_X), random(-WINDOW_CENTER_Y, WINDOW_CENTER_Y)));
         }
     }

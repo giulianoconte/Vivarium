@@ -1,5 +1,7 @@
+// Provides intellisense data for Visual Studio Code: https://github.com/processing/p5.js/issues/1339#issuecomment-354351574
 /// <reference path="./p5_intellisense/p5.d.ts" />
 /// <reference path="./p5_intellisense/p5.global-mode.d.ts" />
+
 /*
 The engine
 */
@@ -19,6 +21,7 @@ function preload() {
     input = new Input();
     let renderer = new Renderer();
     game = new Game(input, renderer);
+    game.initialize();
 }
 
 // p5 function: setup() is called on page load
