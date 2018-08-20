@@ -1,5 +1,5 @@
 
-class GameObject {
+class Entity {
     constructor(x, y) {
         this.acceleration = createVector(random(0.2) - 0.1, random(0.2) - 0.1);
         this.velocity = createVector(random(10) - 5, random(10) - 5);

@@ -1,14 +1,14 @@
 
 
 class SteeringBehavior {
-    constructor(gameObject) {
-        this.gameObject = gameObject;
+    constructor(entity) {
+        this.entity = entity;
     }
 }
 
 class AbstractTargetedSteeringBehavior extends SteeringBehavior {
-    constructor(gameObject, target) {
-        super(gameObject);
+    constructor(entity, target) {
+        super(entity);
         this.target = target;
     }
 
@@ -18,43 +18,43 @@ class AbstractTargetedSteeringBehavior extends SteeringBehavior {
 }
 
 class Seek extends AbstractTargetedSteeringBehavior {
-    constructor(gameObject, target) {
-        super(gameObject, target);
+    constructor(entity, target) {
+        super(entity, target);
     }
 
     calculate() {
-        let seek = p5.Vector.sub(this.target, this.gameObject.position);
-        seek.setMag(this.gameObject.maxSpeed);
+        let seek = p5.Vector.sub(this.target, this.entity.position);
+        seek.setMag(this.entity.maxSpeed);
         return seek;
     }
 }
 
 class Flee extends AbstractTargetedSteeringBehavior {
-    constructor(gameObject, target) {
-        super(gameObject, target);
+    constructor(entity, target) {
+        super(entity, target);
     }
 
     calculate() {
-        let flee = p5.Vector.sub(this.gameObject.position, this.target);
-        flee.setMag(this.gameObject.maxSpeed);
+        let flee = p5.Vector.sub(this.entity.position, this.target);
+        flee.setMag(this.entity.maxSpeed);
         return flee;
     }
 }
 
 class Arrive extends AbstractTargetedSteeringBehavior {
-    constructor(gameObject, target) {
-        super(gameObject, target);
+    constructor(entity, target) {
+        super(entity, target);
     }
 
     calculate() {
         let slowDistance = 200;
-        let distance = dist(this.gameObject.position.x, this.gameObject.position.y, this.target.x, this.target.y);
-        let arrive = p5.Vector.sub(this.target, this.gameObject.position);
+        let distance = dist(this.entity.position.x, this.entity.position.y, this.target.x, this.target.y);
+        let arrive = p5.Vector.sub(this.target, this.entity.position);
         if (distance >= slowDistance) {
-            arrive.setMag(this.gameObject.maxSpeed);
+            arrive.setMag(this.entity.maxSpeed);
         }
         else {
-            let speed = map(distance, 0, slowDistance, 0, this.gameObject.maxSpeed);
+            let speed = map(distance, 0, slowDistance, 0, this.entity.maxSpeed);
             arrive.setMag(speed);
         }
         return arrive;
@@ -62,20 +62,20 @@ class Arrive extends AbstractTargetedSteeringBehavior {
 }
 
 class FreezeFlee extends AbstractTargetedSteeringBehavior {
-    constructor(gameObject, target) {
-        super(gameObject, target);
+    constructor(entity, target) {
+        super(entity, target);
     }
     
     calculate() {
         let freezeDistance = 80;
         let slowDistance = 300;
-        let distance = dist(this.gameObject.position.x, this.gameObject.position.y, this.target.x, this.target.y);
-        let freezeFlee = p5.Vector.sub(this.gameObject.position, this.target);
+        let distance = dist(this.entity.position.x, this.entity.position.y, this.target.x, this.target.y);
+        let freezeFlee = p5.Vector.sub(this.entity.position, this.target);
         if (distance >= slowDistance) {
-            freezeFlee.setMag(this.gameObject.maxSpeed);
+            freezeFlee.setMag(this.entity.maxSpeed);
         }
         else if (distance >= freezeDistance) {
-            let speed = map(distance, freezeDistance, slowDistance, 0, this.gameObject.maxSpeed);
+            let speed = map(distance, freezeDistance, slowDistance, 0, this.entity.maxSpeed);
             freezeFlee.setMag(speed);
         }
         else {
@@ -86,8 +86,8 @@ class FreezeFlee extends AbstractTargetedSteeringBehavior {
 }
 
 class AbstractFlockingSteeringBehavior extends SteeringBehavior {
-    constructor(gameObject, flock) {
-        super(gameObject);
+    constructor(entity, flock) {
+        super(entity);
         this.flock = flock;
     }
 
@@ -97,18 +97,18 @@ class AbstractFlockingSteeringBehavior extends SteeringBehavior {
 }
 
 class Separate extends AbstractFlockingSteeringBehavior {
-    constructor(gameObject, flock) {
-        super(gameObject, flock);
+    constructor(entity, flock) {
+        super(entity, flock);
     }
 
     calculate() {
         let separate = createVector(0, 0);
         let separationDistance = 35;
         for (let i = 0; i < this.flock.length; i++) {
-            let distance = dist(this.gameObject.position.x, this.gameObject.position.y, this.flock[i].position.x, this.flock[i].position.y);
-            let component = p5.Vector.sub(this.gameObject.position, this.flock[i].position);
+            let distance = dist(this.entity.position.x, this.entity.position.y, this.flock[i].position.x, this.flock[i].position.y);
+            let component = p5.Vector.sub(this.entity.position, this.flock[i].position);
             if (distance > 0 && distance < separationDistance) {
-                let speed = map(distance, separationDistance, 0, this.gameObject.maxSpeed / 10, this.gameObject.maxSpeed);
+                let speed = map(distance, separationDistance, 0, this.entity.maxSpeed / 10, this.entity.maxSpeed);
                 component.setMag(speed);
             }
             else {
@@ -121,8 +121,8 @@ class Separate extends AbstractFlockingSteeringBehavior {
 }
 
 class Align extends AbstractFlockingSteeringBehavior {
-    constructor(gameObject, flock) {
-        super(gameObject, flock);
+    constructor(entity, flock) {
+        super(entity, flock);
     }
 
     calculate() {
@@ -130,7 +130,7 @@ class Align extends AbstractFlockingSteeringBehavior {
         let separationDistance = 30;
         let neighborAmount = 0;
         for (let i = 0; i < this.flock.length; i++) {
-            let distance = dist(this.gameObject.position.x, this.gameObject.position.y, this.flock[i].position.x, this.flock[i].position.y);
+            let distance = dist(this.entity.position.x, this.entity.position.y, this.flock[i].position.x, this.flock[i].position.y);
             if (distance > 0 && distance < separationDistance) {
                 align.add(this.flock[i].velocity);
                 neighborAmount++;
@@ -144,8 +144,8 @@ class Align extends AbstractFlockingSteeringBehavior {
 }
 
 class Cohere extends AbstractFlockingSteeringBehavior {
-    constructor(gameObject, flock) {
-        super(gameObject, flock);
+    constructor(entity, flock) {
+        super(entity, flock);
     }
 
     calculate() {
@@ -153,9 +153,9 @@ class Cohere extends AbstractFlockingSteeringBehavior {
         let separationDistance = 25;
         let neighborAmount = 0;
         for (let i = 0; i < this.flock.length; i++) {
-            let distance = dist(this.gameObject.position.x, this.gameObject.position.y, this.flock[i].position.x, this.flock[i].position.y);
+            let distance = dist(this.entity.position.x, this.entity.position.y, this.flock[i].position.x, this.flock[i].position.y);
             if (distance > 0 && distance < separationDistance) {
-                cohere.add(p5.Vector.sub(this.flock[i].position, this.gameObject.position));
+                cohere.add(p5.Vector.sub(this.flock[i].position, this.entity.position));
                 neighborAmount++;
             }
         }
@@ -167,8 +167,8 @@ class Cohere extends AbstractFlockingSteeringBehavior {
 }
 
 class Straferate extends AbstractFlockingSteeringBehavior {
-    constructor(gameObject, flock, referencePoint) {
-        super(gameObject, flock);
+    constructor(entity, flock, referencePoint) {
+        super(entity, flock);
         this.referencePoint = referencePoint;
     }
 
@@ -181,10 +181,10 @@ class Straferate extends AbstractFlockingSteeringBehavior {
         let straferate = createVector(0, 0);
         let separationDistance = 40;
         for (let i = 0; i < this.flock.length; i++) {
-            let distance = dist(this.gameObject.position.x, this.gameObject.position.y, this.flock[i].position.x, this.flock[i].position.y);
+            let distance = dist(this.entity.position.x, this.entity.position.y, this.flock[i].position.x, this.flock[i].position.y);
 
-            let toReferencePoint = p5.Vector.sub(this.referencePoint, this.gameObject.position);
-            let toTarget = p5.Vector.sub(this.flock[i].position, this.gameObject.position);
+            let toReferencePoint = p5.Vector.sub(this.referencePoint, this.entity.position);
+            let toTarget = p5.Vector.sub(this.flock[i].position, this.entity.position);
             let orthogonalToReferencePoint = createVector(-toReferencePoint.y, toReferencePoint.x);
 
             // dot product:
@@ -198,7 +198,7 @@ class Straferate extends AbstractFlockingSteeringBehavior {
             
             if (distance > 0 && distance < separationDistance) {
                 hasOpinion = true;
-                let speed = map(distance, separationDistance, 0, 0, this.gameObject.maxSpeed);
+                let speed = map(distance, separationDistance, 0, 0, this.entity.maxSpeed);
                 component.setMag(speed);
             }
             else {
@@ -207,7 +207,7 @@ class Straferate extends AbstractFlockingSteeringBehavior {
             straferate.add(component);
         }
         if (hasOpinion === false) {
-            straferate = this.gameObject.velocity;
+            straferate = this.entity.velocity;
         }
         return straferate;
     }

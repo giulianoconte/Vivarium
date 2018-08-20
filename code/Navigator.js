@@ -1,7 +1,7 @@
 
 class Navigator {
-    constructor(gameObject) {
-        this.gameObject = gameObject;
+    constructor(entity) {
+        this.entity = entity;
         this.calculateMode = Navigator.CALCULATE_MODES.WEIGHTED_SUM;
 
         this.finalResult = createVector(0, 0);
@@ -17,42 +17,42 @@ class Navigator {
     }
 
     addSeek(id, weight, target) {
-        let behavior = new Seek(this.gameObject, target);
+        let behavior = new Seek(this.entity, target);
         this.addDesire(id, weight, behavior);
     }
 
     addFlee(id, weight, target) {
-        let behavior = new Flee(this.gameObject, target);
+        let behavior = new Flee(this.entity, target);
         this.addDesire(id, weight, behavior);
     }
 
     addArrive(id, weight, target) {
-        let behavior = new Arrive(this.gameObject, target);
+        let behavior = new Arrive(this.entity, target);
         this.addDesire(id, weight, behavior);
     }
 
     addFreezeFlee(id, weight, target) {
-        let behavior = new FreezeFlee(this.gameObject, target);
+        let behavior = new FreezeFlee(this.entity, target);
         this.addDersire(id, weight, behavior);
     }
 
     addSeparate(id, weight, flock) {
-        let behavior = new Separate(this.gameObject, flock);
+        let behavior = new Separate(this.entity, flock);
         this.addDesire(id, weight, behavior);
     }
 
     addAlign(id, weight, flock) {
-        let behavior = new Align(this.gameObject, flock);
+        let behavior = new Align(this.entity, flock);
         this.addDesire(id, weight, behavior);
     }
 
     addCohere(id, weight, flock) {
-        let behavior = new Cohere(this.gameObject, flock);
+        let behavior = new Cohere(this.entity, flock);
         this.addDesire(id, weight, behavior);
     }
 
     addStraferate(id, weight, flock, referencePoint) {
-        let behavior = new Straferate(this.gameObject, flock, referencePoint);
+        let behavior = new Straferate(this.entity, flock, referencePoint);
         this.addDesire(id, weight, behavior);
     }
 
@@ -106,24 +106,24 @@ class Navigator {
         for (let i = 0; i < this.desires.length; i++) {
             this.desires[i].result = this.desires[i].behavior.calculate();
             let desired = this.desires[i].result;
-            desired.limit(this.gameObject.maxSpeed);
-            let current = this.gameObject.velocity;
+            desired.limit(this.entity.maxSpeed);
+            let current = this.entity.velocity;
             let component = p5.Vector.sub(desired, current);
             this.desires[i].weightedResult = p5.Vector.mult(component, this.desires[i].weight);
             this.finalResult.add(this.desires[i].weightedResult);
         }
-        this.finalResult.limit(this.gameObject.maxForce);
+        this.finalResult.limit(this.entity.maxForce);
         return this.finalResult;
     }
     
     drawDesires() {
         for (let i = 0; i < this.desires.length; i++) {
             // console.log(`${this.desires[i].id}: ${this.desires[i].weightedResult}`);
-            Renderer.drawLine(this.gameObject.position, p5.Vector.add(this.gameObject.position, p5.Vector.mult(this.desires[i].weightedResult, 4)), createVector(255, 0, 0), 100);
+            Renderer.drawLine(this.entity.position, p5.Vector.add(this.entity.position, p5.Vector.mult(this.desires[i].weightedResult, 4)), createVector(255, 0, 0), 100);
         }
         // console.log(`${this.finalResult}`);
         // console.log(`-----------`);
-        Renderer.drawLine(this.gameObject.position, p5.Vector.add(this.gameObject.position, p5.Vector.mult(this.finalResult, 8 / this.gameObject.maxForce)), createVector(0, 255, 0), 150);
+        Renderer.drawLine(this.entity.position, p5.Vector.add(this.entity.position, p5.Vector.mult(this.finalResult, 8 / this.entity.maxForce)), createVector(0, 255, 0), 150);
     }
 }
 
