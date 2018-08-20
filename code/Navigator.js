@@ -109,7 +109,7 @@ class Navigator {
             desired.limit(this.entity.maxSpeed);
             let current = this.entity.velocity;
             let component = p5.Vector.sub(desired, current);
-            this.desires[i].weightedResult = p5.Vector.mult(component, this.desires[i].weight);
+            this.desires[i].weightedResult = p5.Vector.mult(component, this.desires[i].weight*this.desires[i].behavior.partiality);
             this.finalResult.add(this.desires[i].weightedResult);
         }
         this.finalResult.limit(this.entity.maxForce);
