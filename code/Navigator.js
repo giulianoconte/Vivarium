@@ -1,162 +1,130 @@
 
 class Navigator {
     constructor(gameObject) {
-        this.desires = [];
-        this.steeringFactory = new AbstractSteeringBehaviorFactory(gameObject);
-        this.desires.push({id: 'seek', behavior: this.steeringFactory.createSeek(game.input.mousePosition), weight: 2, result: createVector(0, 0)});
-        this.desires.push({id: 'flee', behavior: this.steeringFactory.createFlee(game.input.mousePosition), weight: 1, result: createVector(0, 0)});
-        
         this.gameObject = gameObject;
+        this.calculateMode = Navigator.CALCULATE_MODES.WEIGHTED_SUM;
+
+        this.finalResult = createVector(0, 0);
+        this.desires = [];
+    }
+
+    update() {
+        let entityPositions = [];
+    }
+
+    addDesire(id_, weight_, steeringBehavior_) {
+        this.desires.push({id: id_, weight: weight_, behavior: steeringBehavior_, result: createVector(0, 0), weightedResult: createVector(0, 0)});
+    }
+
+    addSeek(id, weight, target) {
+        let behavior = new Seek(this.gameObject, target);
+        this.addDesire(id, weight, behavior);
+    }
+
+    addFlee(id, weight, target) {
+        let behavior = new Flee(this.gameObject, target);
+        this.addDesire(id, weight, behavior);
+    }
+
+    addArrive(id, weight, target) {
+        let behavior = new Arrive(this.gameObject, target);
+        this.addDesire(id, weight, behavior);
+    }
+
+    addFreezeFlee(id, weight, target) {
+        let behavior = new FreezeFlee(this.gameObject, target);
+        this.addDersire(id, weight, behavior);
+    }
+
+    addSeparate(id, weight, flock) {
+        let behavior = new Separate(this.gameObject, flock);
+        this.addDesire(id, weight, behavior);
+    }
+
+    addAlign(id, weight, flock) {
+        let behavior = new Align(this.gameObject, flock);
+        this.addDesire(id, weight, behavior);
+    }
+
+    addCohere(id, weight, flock) {
+        let behavior = new Cohere(this.gameObject, flock);
+        this.addDesire(id, weight, behavior);
+    }
+
+    addStraferate(id, weight, flock, referencePoint) {
+        let behavior = new Straferate(this.gameObject, flock, referencePoint);
+        this.addDesire(id, weight, behavior);
     }
 
     chooseDesiredVelocity() {
-        let desired = createVector(0, 0);
+        let desired;
+        switch (this.calculateMode) {
+            case Navigator.CALCULATE_MODES.WEIGHTED_SUM:
+                desired = this.calculateWeightedSum();
+                break;
+            case Navigator.CALCULATE_MODES.WEIGHTED_AVERAGE:
+                desired = this.calculateWeightedAverage();
+                break;
+            default:
+                desired = this.calculateWeightedSum();
+                break;
+        }
+        return desired;
+    }
+
+    calculateWeightedAverage() {
+        this.finalResult = createVector(0, 0);
         let totalWeight = 0;
         for (let i = 0; i < this.desires.length; i++) {
-            this.desires[i].result = this.desires[i].behavior.execute();
-            desired.add(p5.Vector.mult(this.desires[i].result, this.desires[i].weight));
+            this.desires[i].result = this.desires[i].behavior.calculate();
+            this.desires[i].weightedResult = p5.Vector.mult(this.desires[i].result, this.desires[i].weight);
+            this.finalResult.add(this.desires[i].weightedResult);
             totalWeight += this.desires[i].weight;
         }
         if (totalWeight !== 0) {
-            desired.mult(1.0 / totalWeight);
+            this.finalResult.mult(1.0 / totalWeight);
         }
-        return desired;
-
-        // this.arrive(game.input.mousePosition);
-        // this.arrive(game.input.mousePosition);
-        // this.flee(game.input.mousePosition);
-        // for (let i = 0; i < game.entities.length; i++) {
-        //     this.straferate(game.entities[i].position, game.input.mousePosition);
-        // }
-
-        // return this.desired;
+        return this.finalResult;
     }
 
-    arrive(target) {
-        let slowDistance = 200;
-        let distance = dist(this.position.x, this.position.y, target.x, target.y);
-        let arrive = p5.Vector.sub(target, this.position);
-        if (distance >= slowDistance) {
-            arrive.setMag(this.maxSpeed);
+    calculateWeightedSum() {
+        this.finalResult = createVector(0, 0);
+        for (let i = 0; i < this.desires.length; i++) {
+            this.desires[i].result = this.desires[i].behavior.calculate();
+            this.desires[i].weightedResult = p5.Vector.mult(this.desires[i].result, this.desires[i].weight);
+            this.finalResult.add(this.desires[i].weightedResult);
         }
-        else {
-            let speed = map(distance, 0, slowDistance, 0, this.maxSpeed);
-            arrive.setMag(speed);
-        }
-        this.desired.add(arrive);
+        return this.finalResult;
     }
 
-    freezeFlee(target) {
-        let freezeDistance = 80;
-        let slowDistance = 300;
-        let distance = dist(this.position.x, this.position.y, target.x, target.y);
-        let arrive = p5.Vector.sub(this.position, target);
-        if (distance >= slowDistance) {
-            arrive.setMag(this.maxSpeed);
-        }
-        else if (distance >= freezeDistance) {
-            let speed = map(distance, freezeDistance, slowDistance, 0, this.maxSpeed);
-            arrive.setMag(speed);
-        }
-        else {
-            arrive.setMag(0);
-        }
-        this.desired.add(arrive);
+    chooseDesiredAcceleration() {
+        return this.calculateWeightedSumAsForce();
     }
-
-    separate(target) {
-        let separationDistance = 15;
-        let distance = dist(this.position.x, this.position.y, target.x, target.y);
-        let separate = p5.Vector.sub(this.position, target);
-        if (distance > 0 && distance < separationDistance) {
-            let speed = map(distance, separationDistance, 0, this.maxSpeed/10, this.maxSpeed);
-            separate.setMag(speed);
+    
+    calculateWeightedSumAsForce() {
+        this.finalResult = createVector(0, 0);
+        for (let i = 0; i < this.desires.length; i++) {
+            this.desires[i].result = this.desires[i].behavior.calculate();
+            let desired = this.desires[i].result;
+            desired.limit(this.gameObject.maxSpeed);
+            let current = this.gameObject.velocity;
+            let component = p5.Vector.sub(desired, current);
+            this.desires[i].weightedResult = p5.Vector.mult(component, this.desires[i].weight);
+            this.finalResult.add(this.desires[i].weightedResult);
         }
-        else {
-            separate.setMag(0);
-        }
-        this.desired.add(separate);
+        this.finalResult.limit(this.gameObject.maxForce);
+        return this.finalResult;
     }
-
-    straferate(target, referencePoint) {
-        let distance = dist(this.position.x, this.position.y, target.x, target.y);
-        
-        let toReferencePoint = p5.Vector.sub(referencePoint, this.position);
-        let toTarget = p5.Vector.sub(target, this.position);
-        let orthogonalToReferencePoint = createVector(-toReferencePoint.y, toReferencePoint.x);
-
-        // dot product:
-        //  positive -> vectors have acute angle
-        //  0 -> vectors are orthogonal
-        //  negative -> vectors have obtuse angle
-        let orthogonalAndToTargetDotProduct = p5.Vector.dot(toTarget, orthogonalToReferencePoint);
-        let straferate = (orthogonalAndToTargetDotProduct >= 0) 
-            ? p5.Vector.mult(orthogonalToReferencePoint, -1)
-            : p5.Vector.mult(orthogonalToReferencePoint, 1);
-
-        let separationDistance = 40;
-        if (distance > 0 && distance < separationDistance) {
-            Renderer.drawLine(this.position, target, createVector(255, 255, 255), 50);
-            let speed = map(distance, separationDistance, 0, 0, this.maxSpeed);
-            straferate.setMag(speed);
+    
+    drawDesires() {
+        for (let i = 0; i < this.desires.length; i++) {
+            // console.log(`${this.desires[i].id}: ${this.desires[i].weightedResult}`);
+            Renderer.drawLine(this.gameObject.position, p5.Vector.add(this.gameObject.position, p5.Vector.mult(this.desires[i].weightedResult, 4)), createVector(255, 0, 0), 100);
         }
-        else {
-            straferate.setMag(0);
-        }
-        this.desired.add(straferate);
+        // console.log(`${this.finalResult}`);
+        // console.log(`-----------`);
+        Renderer.drawLine(this.gameObject.position, p5.Vector.add(this.gameObject.position, p5.Vector.mult(this.finalResult, 8 / this.gameObject.maxForce)), createVector(0, 255, 0), 150);
     }
 }
 
-class AbstractSteeringBehaviorFactory {
-    constructor(gameObject) {
-        this.gameObject = gameObject;
-    }
-
-    createSeek(target) {
-        return new Seek(this.gameObject, target);
-    }
-
-    createFlee(target) {
-        return new Flee(this.gameObject, target);
-    }
-}
-
-class SteeringBehavior {
-    constructor(gameObject) {
-        this.gameObject = gameObject;
-    }
-}
-
-class Seek extends SteeringBehavior {
-    constructor(gameObject, target) {
-        super(gameObject);
-        this.target = target;
-    }
-
-    updateTarget(target) {
-        this.target = target;
-    }
-
-    execute() {
-        let seek = p5.Vector.sub(this.target, this.gameObject.position);
-        seek.setMag(this.gameObject.maxSpeed);
-        return seek;
-    }
-}
-
-class Flee extends SteeringBehavior {
-    constructor(gameObject, target) {
-        super(gameObject);
-        this.target = target;
-    }
-
-    updateTarget(target) {
-        this.target = target;
-    }
-
-    execute() {
-        let flee = p5.Vector.sub(this.gameObject.position, this.target);
-        flee.setMag(this.gameObject.maxSpeed);
-        return flee;
-    }
-}
+Navigator.CALCULATE_MODES = Object.freeze({ WEIGHTED_SUM: 0, WEIGHTED_AVERAGE: 1});

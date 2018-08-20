@@ -11,7 +11,7 @@ class Game {
     }
 
     initialize() {
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < 50; i++) {
             this.entities.push(new GameObject(random(-WINDOW_CENTER_X, WINDOW_CENTER_X), random(-WINDOW_CENTER_Y, WINDOW_CENTER_Y)));
         }
     }
@@ -48,6 +48,7 @@ class Game {
     render() {
         for (let i = 0; i < this.entities.length; i++) {
             this.renderer.render(this.entities[i].drawing);
+            // this.entities[i].navigator.drawDesires();
         }
     }
 }
