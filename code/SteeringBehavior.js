@@ -43,19 +43,19 @@ class Flee extends AbstractTargetedSteeringBehavior {
 }
 
 class Arrive extends AbstractTargetedSteeringBehavior {
-    constructor(entity, target) {
+    constructor(entity, target, slowDistance) {
         super(entity, target);
+        this.slowDistance = slowDistance;
     }
 
     calculate() {
-        let slowDistance = 200;
         let distance = dist(this.entity.position.x, this.entity.position.y, this.target.x, this.target.y);
         let arrive = p5.Vector.sub(this.target, this.entity.position);
-        if (distance >= slowDistance) {
+        if (distance >= this.slowDistance) {
             arrive.setMag(this.entity.maxSpeed);
         }
         else {
-            let speed = map(distance, 0, slowDistance, 0, this.entity.maxSpeed);
+            let speed = map(distance, 0, this.slowDistance, 0, this.entity.maxSpeed);
             arrive.setMag(speed);
         }
         return arrive;
@@ -64,20 +64,20 @@ class Arrive extends AbstractTargetedSteeringBehavior {
 
 // Will freeze if the target comes too close, else it will slowly accelerate away
 class FreezeFlee extends AbstractTargetedSteeringBehavior {
-    constructor(entity, target) {
+    constructor(entity, target, freezeDistance, slowDistance) {
         super(entity, target);
+        this.freezeDistance = freezeDistance;
+        this.slowDistance = slowDistance;
     }
     
     calculate() {
-        let freezeDistance = 80;
-        let slowDistance = 300;
         let distance = dist(this.entity.position.x, this.entity.position.y, this.target.x, this.target.y);
         let freezeFlee = p5.Vector.sub(this.entity.position, this.target);
-        if (distance >= slowDistance) {
+        if (distance >= this.slowDistance) {
             freezeFlee.setMag(this.entity.maxSpeed);
         }
-        else if (distance >= freezeDistance) {
-            let speed = map(distance, freezeDistance, slowDistance, 0, this.entity.maxSpeed);
+        else if (distance >= this.freezeDistance) {
+            let speed = map(distance, this.freezeDistance, this.slowDistance, 0, this.entity.maxSpeed);
             freezeFlee.setMag(speed);
         }
         else {
@@ -101,20 +101,20 @@ class AbstractFlockingSteeringBehavior extends SteeringBehavior {
 // Separation: 1 of 3 classic flocking behaviors of Craig Reynolds' boids.
 // Entity tries to keep a minimum distance between its neighbors
 class Separate extends AbstractFlockingSteeringBehavior {
-    constructor(entity, flock) {
+    constructor(entity, flock, separationDistance) {
         super(entity, flock);
+        this.separationDistance = separationDistance;
     }
 
     calculate() {
         this.partiality = 0;
         let separate = createVector(0, 0);
-        let separationDistance = 25;
         for (let i = 0; i < this.flock.length; i++) {
             let distance = dist(this.entity.position.x, this.entity.position.y, this.flock[i].position.x, this.flock[i].position.y);
             let component = p5.Vector.sub(this.entity.position, this.flock[i].position);
-            if (distance > 0 && distance < separationDistance) {
+            if (distance > 0 && distance < this.separationDistance) {
                 this.partiality = 1;
-                let speed = map(distance, separationDistance, 0, 0, this.entity.maxSpeed);
+                let speed = map(distance, this.separationDistance, 0, 0, this.entity.maxSpeed);
                 component.setMag(speed);
             }
             else {
@@ -129,18 +129,18 @@ class Separate extends AbstractFlockingSteeringBehavior {
 // Alignment: 2 of 3 classic flocking behaviors of Craig Reynolds' boids.
 // Entity tries to keep same velocity as its neighbors
 class Align extends AbstractFlockingSteeringBehavior {
-    constructor(entity, flock) {
+    constructor(entity, flock, separationDistance) {
         super(entity, flock);
+        this.separationDistance = separationDistance;
     }
 
     calculate() {
         this.partiality = 0;
         let align = createVector(0, 0);
-        let separationDistance = 30;
         let neighborAmount = 0;
         for (let i = 0; i < this.flock.length; i++) {
             let distance = dist(this.entity.position.x, this.entity.position.y, this.flock[i].position.x, this.flock[i].position.y);
-            if (distance > 0 && distance < separationDistance) {
+            if (distance > 0 && distance < this.separationDistance) {
                 this.partiality = 1;
                 align.add(this.flock[i].velocity);
                 neighborAmount++;
@@ -156,18 +156,18 @@ class Align extends AbstractFlockingSteeringBehavior {
 // Cohesion: 3 of 3 classic flocking behaviors of Craig Reynolds' boids.
 // Entity tries to move toward the average position of its neighbors
 class Cohere extends AbstractFlockingSteeringBehavior {
-    constructor(entity, flock) {
+    constructor(entity, flock, separationDistance) {
         super(entity, flock);
+        this.separationDistance = separationDistance;
     }
 
     calculate() {
         this.partiality = 0;
         let cohere = createVector(0, 0);
-        let separationDistance = 25;
         let neighborAmount = 0;
         for (let i = 0; i < this.flock.length; i++) {
             let distance = dist(this.entity.position.x, this.entity.position.y, this.flock[i].position.x, this.flock[i].position.y);
-            if (distance > 0 && distance < separationDistance) {
+            if (distance > 0 && distance < this.separationDistance) {
                 this.partiality = 1;
                 cohere.add(p5.Vector.sub(this.flock[i].position, this.entity.position));
                 neighborAmount++;
@@ -183,9 +183,10 @@ class Cohere extends AbstractFlockingSteeringBehavior {
 // Similar to Separate except it will "strafe" away from the flock with respect to a reference point.
 // "Strafing" here means it will move orthogonally to the reference point.
 class Straferate extends AbstractFlockingSteeringBehavior {
-    constructor(entity, flock, referencePoint) {
+    constructor(entity, flock, referencePoint, separationDistance) {
         super(entity, flock);
         this.referencePoint = referencePoint;
+        this.separationDistance = separationDistance;
     }
 
     updateReferencePoint(referencePoint) {
@@ -195,7 +196,6 @@ class Straferate extends AbstractFlockingSteeringBehavior {
     calculate() {
         this.partiality = 0;
         let straferate = createVector(0, 0);
-        let separationDistance = 40;
         for (let i = 0; i < this.flock.length; i++) {
             let distance = dist(this.entity.position.x, this.entity.position.y, this.flock[i].position.x, this.flock[i].position.y);
 
@@ -212,9 +212,9 @@ class Straferate extends AbstractFlockingSteeringBehavior {
                 ? p5.Vector.mult(orthogonalToReferencePoint, -1)
                 : p5.Vector.mult(orthogonalToReferencePoint, 1);
             
-            if (distance > 0 && distance < separationDistance) {
+            if (distance > 0 && distance < this.separationDistance) {
                 this.partiality = 1;
-                let speed = map(distance, separationDistance, 0, 0, this.entity.maxSpeed);
+                let speed = map(distance, this.separationDistance, 0, 0, this.entity.maxSpeed);
                 component.setMag(speed);
             }
             else {

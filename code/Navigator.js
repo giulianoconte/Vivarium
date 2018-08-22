@@ -26,33 +26,33 @@ class Navigator {
         this.addDesire(id, weight, behavior);
     }
 
-    addArrive(id, weight, target) {
-        let behavior = new Arrive(this.entity, target);
+    addArrive(id, weight, target, slowDistance) {
+        let behavior = new Arrive(this.entity, target, slowDistance);
         this.addDesire(id, weight, behavior);
     }
 
-    addFreezeFlee(id, weight, target) {
-        let behavior = new FreezeFlee(this.entity, target);
-        this.addDersire(id, weight, behavior);
-    }
-
-    addSeparate(id, weight, flock) {
-        let behavior = new Separate(this.entity, flock);
+    addFreezeFlee(id, weight, target, freezeDistance, slowDistance) {
+        let behavior = new FreezeFlee(this.entity, target, freezeDistance, slowDistance);
         this.addDesire(id, weight, behavior);
     }
 
-    addAlign(id, weight, flock) {
-        let behavior = new Align(this.entity, flock);
+    addSeparate(id, weight, flock, separationDistance) {
+        let behavior = new Separate(this.entity, flock, separationDistance);
         this.addDesire(id, weight, behavior);
     }
 
-    addCohere(id, weight, flock) {
-        let behavior = new Cohere(this.entity, flock);
+    addAlign(id, weight, flock, separationDistance) {
+        let behavior = new Align(this.entity, flock, separationDistance);
         this.addDesire(id, weight, behavior);
     }
 
-    addStraferate(id, weight, flock, referencePoint) {
-        let behavior = new Straferate(this.entity, flock, referencePoint);
+    addCohere(id, weight, flock, separationDistance) {
+        let behavior = new Cohere(this.entity, flock, separationDistance);
+        this.addDesire(id, weight, behavior);
+    }
+
+    addStraferate(id, weight, flock, referencePoint, separationDistance) {
+        let behavior = new Straferate(this.entity, flock, referencePoint, separationDistance);
         this.addDesire(id, weight, behavior);
     }
 
