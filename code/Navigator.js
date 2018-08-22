@@ -76,43 +76,41 @@ class Navigator {
         this.finalResult = createVector(0, 0);
         let totalWeight = 0;
         for (let i = 0; i < this.desires.length; i++) {
-            this.desires[i].result = this.desires[i].behavior.calculate();
-            this.desires[i].weightedResult = p5.Vector.mult(this.desires[i].result, this.desires[i].weight);
+            let desire = this.desires[i].behavior.calculate();
+            this.desires[i].result = desire;
+            let adjustedWeight = this.desires[i].weight * this.desires[i].behavior.partiality;
+            let weightedResult = p5.Vector.mult(desire, adjustedWeight);
+            this.desires[i].weightedResult = weightedResult;
             this.finalResult.add(this.desires[i].weightedResult);
-            totalWeight += this.desires[i].weight;
+            totalWeight += adjustedWeight;
         }
         if (totalWeight !== 0) {
             this.finalResult.mult(1.0 / totalWeight);
+        }
+        else {
+            this.finalResult = this.entity.velocity;
         }
         return this.finalResult;
     }
 
     calculateWeightedSum() {
         this.finalResult = createVector(0, 0);
+        let totalWeight = 0;
         for (let i = 0; i < this.desires.length; i++) {
-            this.desires[i].result = this.desires[i].behavior.calculate();
-            this.desires[i].weightedResult = p5.Vector.mult(this.desires[i].result, this.desires[i].weight);
+            let desire = this.desires[i].behavior.calculate();
+            this.desires[i].result = desire;
+            let adjustedWeight = this.desires[i].weight * this.desires[i].behavior.partiality;
+            let weightedResult = p5.Vector.mult(desire, adjustedWeight);
+            this.desires[i].weightedResult = weightedResult;
             this.finalResult.add(this.desires[i].weightedResult);
+            totalWeight += adjustedWeight;
         }
-        return this.finalResult;
-    }
+        if (totalWeight !== 0) {
 
-    chooseDesiredAcceleration() {
-        return this.calculateWeightedSumAsForce();
-    }
-    
-    calculateWeightedSumAsForce() {
-        this.finalResult = createVector(0, 0);
-        for (let i = 0; i < this.desires.length; i++) {
-            this.desires[i].result = this.desires[i].behavior.calculate();
-            let desired = this.desires[i].result;
-            desired.limit(this.entity.maxSpeed);
-            let current = this.entity.velocity;
-            let component = p5.Vector.sub(desired, current);
-            this.desires[i].weightedResult = p5.Vector.mult(component, this.desires[i].weight*this.desires[i].behavior.partiality);
-            this.finalResult.add(this.desires[i].weightedResult);
         }
-        this.finalResult.limit(this.entity.maxForce);
+        else {
+            this.finalResult = this.entity.velocity;
+        }
         return this.finalResult;
     }
     

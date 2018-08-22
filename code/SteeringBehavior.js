@@ -108,13 +108,13 @@ class Separate extends AbstractFlockingSteeringBehavior {
     calculate() {
         this.partiality = 0;
         let separate = createVector(0, 0);
-        let separationDistance = 35;
+        let separationDistance = 25;
         for (let i = 0; i < this.flock.length; i++) {
             let distance = dist(this.entity.position.x, this.entity.position.y, this.flock[i].position.x, this.flock[i].position.y);
             let component = p5.Vector.sub(this.entity.position, this.flock[i].position);
             if (distance > 0 && distance < separationDistance) {
                 this.partiality = 1;
-                let speed = map(distance, separationDistance, 0, this.entity.maxSpeed / 10, this.entity.maxSpeed);
+                let speed = map(distance, separationDistance, 0, 0, this.entity.maxSpeed);
                 component.setMag(speed);
             }
             else {

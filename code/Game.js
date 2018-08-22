@@ -11,7 +11,7 @@ class Game {
     }
 
     initialize() {
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 30; i++) {
             this.entities.push(new Entity(random(-WINDOW_CENTER_X, WINDOW_CENTER_X), random(-WINDOW_CENTER_Y, WINDOW_CENTER_Y)));
         }
     }

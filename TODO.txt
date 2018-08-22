@@ -1,15 +1,11 @@
 
-implement flocking to test between the three ways of calculating steering
-    add getPositions() to game.entities by adding an extension function (if those exist) or creating its own class or possibly implementing blackboard tech
+implement steering behaviors
+    pursue and evade
+    wander    
+
+implement GAIA
+
+look into blackboard tech
 use quadtree for finding neighbors 
     http://www.mikechambers.com/blog/2011/03/21/javascript-quadtree-implementation/ 
     https://gamedevelopment.tutsplus.com/tutorials/quick-tip-use-quadtrees-to-detect-likely-collisions-in-2d-space--gamedev-374
-
-implement steering behaviors
-    pursue and evade
-    wander
-    alignment
-    cohesion
-    
-
-implement GAIA
