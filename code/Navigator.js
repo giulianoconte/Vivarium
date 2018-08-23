@@ -36,6 +36,11 @@ class Navigator {
         this.addDesire(id, weight, behavior);
     }
 
+    addPursue(id, weight, target, maxEstimationTime) {
+        let behavior = new Pursue(this.entity, target, maxEstimationTime);
+        this.addDesire(id, weight, behavior);
+    }
+
     addSeparate(id, weight, flock, separationDistance) {
         let behavior = new Separate(this.entity, flock, separationDistance);
         this.addDesire(id, weight, behavior);

@@ -11,9 +11,15 @@ class Game {
     }
 
     initialize() {
-        for (let i = 0; i < 50; i++) {
-            this.entities.push(new Entity(random(-WINDOW_CENTER_X, WINDOW_CENTER_X), random(-WINDOW_CENTER_Y, WINDOW_CENTER_Y)));
-        }
+        // for (let i = 0; i < 50; i++) {
+        //     this.entities.push(new Entity(random(-WINDOW_CENTER_X, WINDOW_CENTER_X), random(-WINDOW_CENTER_Y, WINDOW_CENTER_Y)));
+        // }
+        this.entities.push(new Entity(random(-WINDOW_CENTER_X, WINDOW_CENTER_X), random(-WINDOW_CENTER_Y, WINDOW_CENTER_Y)));
+        this.entities.push(new Entity(random(-WINDOW_CENTER_X, WINDOW_CENTER_X), random(-WINDOW_CENTER_Y, WINDOW_CENTER_Y)));
+        // this.entities[0].velocity = p5.Vector.sub(this.entities[0].position, createVector(0, 0));
+        // Renderer.drawLine(this.entities[0].position, p5.Vector.add(this.entities[0].position, this.entities[0].velocity), createVector(100, 100, 100), 255);
+        this.entities[1].navigator.addPursue('pursue', 1, this.entities[0], 20);
+        this.entities[1].drawing.color = createVector(255, 0, 0);
     }
 
     getInput() {

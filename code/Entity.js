@@ -2,7 +2,7 @@
 class Entity {
     constructor(x, y) {
         this.acceleration = createVector(random(0.2) - 0.1, random(0.2) - 0.1);
-        this.velocity = createVector(random(10) - 5, random(10) - 5);
+        this.velocity = createVector(random(3) - ((3) / 2), random(3) - ((3) / 2));
         this.position = createVector(x, y);
 
         this.maxSpeed = 4;
@@ -15,9 +15,9 @@ class Entity {
         // this.navigator.addFlee('flee', 1, game.input.mousePosition);
         // this.navigator.addArrive('arrive', 2, game.input.mousePosition, 200);
         // this.navigator.addFreezeFlee('freezeFlee', 1, game.input.mousePosition, 80, 120);
-        this.navigator.addSeparate('separate', 2, game.entities, 35);
-        this.navigator.addAlign('align', 1.5, game.entities, 30);
-        this.navigator.addCohere('cohere', 1, game.entities, 25);
+        // this.navigator.addSeparate('separate', 2, game.entities, 35);
+        // this.navigator.addAlign('align', 1.5, game.entities, 30);
+        // this.navigator.addCohere('cohere', 1, game.entities, 25);
         // this.navigator.addStraferate('straferate', 1, game.entities, game.input.mousePosition, 40);
 
         this.desired = createVector(0, 0);

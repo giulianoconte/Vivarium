@@ -42,6 +42,23 @@ class Flee extends AbstractTargetedSteeringBehavior {
     }
 }
 
+class Pursue extends AbstractTargetedSteeringBehavior {
+    constructor(entity, target, maxEstimationTime) {
+        super(entity, target);
+        this.maxEstimationTime = maxEstimationTime;
+    }
+
+    calculate() {
+        let distance = dist(this.entity.position.x, this.entity.position.y, this.target.position.x, this.target.position.y);
+        let timeUntilImpact = distance / this.target.maxSpeed;
+        let estimatedPosition = p5.Vector.add(this.target.position, p5.Vector.mult(this.target.velocity, Math.min(timeUntilImpact, this.maxEstimationTime)));
+        let pursue = p5.Vector.sub(estimatedPosition, this.entity.position);
+        pursue.setMag(this.entity.maxSpeed);
+        Renderer.drawLine(this.entity.position, estimatedPosition, createVector(255, 255, 255), 255);
+        return pursue;
+    }
+}
+
 class Arrive extends AbstractTargetedSteeringBehavior {
     constructor(entity, target, slowDistance) {
         super(entity, target);
