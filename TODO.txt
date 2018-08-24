@@ -2,7 +2,6 @@
 Improve pursuit estimation for if pursuer has less maxSpeed
 
 implement steering behaviors
-    evade
     wander    
 
 implement GAIA
