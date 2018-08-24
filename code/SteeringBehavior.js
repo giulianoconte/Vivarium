@@ -54,7 +54,6 @@ class Pursue extends AbstractTargetedSteeringBehavior {
         let estimatedPosition = p5.Vector.add(this.target.position, p5.Vector.mult(this.target.velocity, Math.min(timeUntilImpact, this.maxEstimationTime)));
         let pursue = p5.Vector.sub(estimatedPosition, this.entity.position);
         pursue.setMag(this.entity.maxSpeed);
-        Renderer.drawLine(this.entity.position, estimatedPosition, createVector(255, 255, 0), 255);
         return pursue;
     }
 }
@@ -71,7 +70,6 @@ class Evade extends AbstractTargetedSteeringBehavior {
         let estimatedPosition = p5.Vector.add(this.target.position, p5.Vector.mult(this.target.velocity, Math.min(timeUntilImpact, this.maxEstimationTime)));
         let evade = p5.Vector.sub(this.entity.position, estimatedPosition);
         evade.setMag(this.entity.maxSpeed);
-        Renderer.drawLine(this.entity.position, p5.Vector.add(this.entity.position, evade), createVector(255, 0, 255), 255);
         return evade;
     }
 }

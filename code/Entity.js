@@ -23,10 +23,10 @@ class Entity {
         this.desired = createVector(0, 0);
         this.direction = this.velocity.heading();
 
-        let shape = Renderer.SHAPES.THIN_TRIANGLE;
+        let shape = Renderer.SHAPES.SQUARE;
         let color = createVector(204, 101, 192);
         color = createVector(127 - random(127), 100 + 127 - random(127), 200 + random(255-200));
-        this.drawing = new Drawing(shape, 20, color, this.position, this.direction);
+        this.drawing = new Drawing(shape, 10, color, this.position, this.direction);
     }
 
     update() {
