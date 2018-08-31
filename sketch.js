@@ -8,8 +8,8 @@ The engine
 
 // the window where stuff is rendered
 let canvas;
-let WINDOW_WIDTH = 400;
-let WINDOW_HEIGHT = 400;
+let WINDOW_WIDTH = 800;
+let WINDOW_HEIGHT = 800;
 let WINDOW_CENTER_X = WINDOW_WIDTH / 2;
 let WINDOW_CENTER_Y = WINDOW_HEIGHT / 2;
 

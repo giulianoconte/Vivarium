@@ -1,6 +1,11 @@
 
 let PI = 3.14159265;
 
+let RELATIVE_SQUARE_SIZE = 1.0;
+let RELATIVE_CIRCLE_SIZE = 1.15;
+let RELATIVE_TRIANGLE_SIZE = 1.5;
+let RELATIVE_THIN_TRIANGLE_SIZE = 2.1;
+
 class Renderer {
     constructor() {}
 
@@ -11,11 +16,13 @@ class Renderer {
         switch (drawing.shape) {
             case Renderer.SHAPES.SQUARE:
             {
+                let size = drawing.size * RELATIVE_SQUARE_SIZE;
+
                 let centerPoint = createVector(drawing.position.x, drawing.position.y);
-                let point0 = createVector(drawing.position.x - drawing.size/2, drawing.position.y - drawing.size/2);
-                let point1 = createVector(drawing.position.x + drawing.size/2, drawing.position.y - drawing.size/2);
-                let point2 = createVector(drawing.position.x + drawing.size/2, drawing.position.y + drawing.size/2);
-                let point3 = createVector(drawing.position.x - drawing.size/2, drawing.position.y + drawing.size/2);
+                let point0 = createVector(drawing.position.x - size/2, drawing.position.y - size/2);
+                let point1 = createVector(drawing.position.x + size/2, drawing.position.y - size/2);
+                let point2 = createVector(drawing.position.x + size/2, drawing.position.y + size/2);
+                let point3 = createVector(drawing.position.x - size/2, drawing.position.y + size/2);
                 let originPoint0 = this.translate(point0, this.scale(centerPoint, -1));
                 let originPoint1 = this.translate(point1, this.scale(centerPoint, -1));
                 let originPoint2 = this.translate(point2, this.scale(centerPoint, -1));
@@ -39,12 +46,16 @@ class Renderer {
                 break;
             }
             case Renderer.SHAPES.CIRCLE:
-                ellipse(WINDOW_CENTER_X + drawing.position.x, WINDOW_CENTER_Y - drawing.position.y, drawing.size, drawing.size);
+                let size = drawing.size * RELATIVE_CIRCLE_SIZE;
+
+                ellipse(WINDOW_CENTER_X + drawing.position.x, WINDOW_CENTER_Y - drawing.position.y, size, size);
                 break;
             case Renderer.SHAPES.TRIANGLE:
             {
+                let size = drawing.size * RELATIVE_TRIANGLE_SIZE;
+
                 let centerPoint = createVector(drawing.position.x, drawing.position.y);
-                let point0 = createVector(centerPoint.x + (drawing.size/2), centerPoint.y);
+                let point0 = createVector(centerPoint.x + (size/2), centerPoint.y);
                 let originPoint0 = this.translate(point0, this.scale(centerPoint, -1));
                 let rotatedOriginPoint0 = this.rotate(originPoint0, drawing.rotation + (0*PI/3));
                 let rotatedOriginPoint1 = this.rotate(rotatedOriginPoint0, (2*PI/3));
@@ -61,8 +72,10 @@ class Renderer {
             }
             case Renderer.SHAPES.THIN_TRIANGLE:
             {
+                let size = drawing.size * RELATIVE_THIN_TRIANGLE_SIZE;
+
                 let centerPoint = createVector(drawing.position.x, drawing.position.y);
-                let point0 = createVector(centerPoint.x + (drawing.size/2), centerPoint.y);
+                let point0 = createVector(centerPoint.x + (size/2), centerPoint.y);
                 let originPoint0 = this.translate(point0, this.scale(centerPoint, -1));
                 let rotatedOriginPoint0 = this.rotate(originPoint0, drawing.rotation + (0*PI/3));
                 let rotatedOriginPoint1 = this.rotate(this.scale(rotatedOriginPoint0, 0.5), (2*PI/3));
