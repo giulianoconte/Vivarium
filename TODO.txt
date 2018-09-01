@@ -1,12 +1,10 @@
 
 Improve pursuit estimation for if pursuer has less maxSpeed
 
-implement steering behaviors
-    wander    
-
 implement GAIA
 
 look into blackboard tech
 use quadtree for finding neighbors 
     http://www.mikechambers.com/blog/2011/03/21/javascript-quadtree-implementation/ 
     https://gamedevelopment.tutsplus.com/tutorials/quick-tip-use-quadtrees-to-detect-likely-collisions-in-2d-space--gamedev-374
+

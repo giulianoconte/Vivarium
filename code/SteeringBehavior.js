@@ -7,6 +7,39 @@ class SteeringBehavior {
     }
 }
 
+class Wander extends SteeringBehavior {
+    constructor(entity, turnStrength, turnChangeRate) {
+        super(entity);
+        this.turnStrength = turnStrength;
+        this.turnChangeRate = turnChangeRate;
+        this.lastWander = createVector(this.entity.velocity.x, this.entity.velocity.y);
+        // this.calculate();
+    }
+
+    calculate() {
+        let lastWander = this.lastWander;
+        let offset = createVector(random(2) - 1, random(2) - 1);
+        offset.setMag(this.turnChangeRate);
+        let lastWanderWithOffset = p5.Vector.add(lastWander, offset);
+
+        let wander = this.constrainToWanderCircle(lastWanderWithOffset);
+        this.lastWander = wander;
+        let color = createVector(255, 255, 255);
+        let alpha = 100;
+        // Renderer.drawLine(this.entity.position, p5.Vector.add(this.entity.position, wander), color, alpha);
+        return wander;
+    }
+
+    constrainToWanderCircle(lastWanderWithOffset) {
+        let wanderCircleOffset = createVector(this.entity.velocity.x, this.entity.velocity.y);
+        wanderCircleOffset.setMag((4 / 3) * this.turnStrength);
+        let lastWanderWithOffsetToOrigin = p5.Vector.sub(lastWanderWithOffset, wanderCircleOffset);
+        let lastWanderWithOffsetToOriginConstrained = (lastWanderWithOffsetToOrigin.setMag(this.turnStrength));
+        let lastWanderWithOffsetConstrained = (lastWanderWithOffsetToOriginConstrained.add(wanderCircleOffset));
+        return lastWanderWithOffsetConstrained;
+    }
+}
+
 class AbstractTargetedSteeringBehavior extends SteeringBehavior {
     constructor(entity, target) {
         super(entity);

@@ -16,6 +16,7 @@ class Game {
             this.entities.push(new Entity(random(-WINDOW_CENTER_X, WINDOW_CENTER_X), random(-WINDOW_CENTER_Y, WINDOW_CENTER_Y)));
         }
         for (let i = 0; i < entityAmount; i++) {
+            this.entities[i].navigator.addWander('wander', 0.1, 50, 1);
             this.entities[i].navigator.addPursue('pursue', 1, this.entities[(i + 1) % entityAmount], 20);
             this.entities[i].navigator.addEvade('evade', 1, this.entities[(i + entityAmount - 1) % entityAmount], 20);
 

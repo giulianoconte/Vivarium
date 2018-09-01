@@ -9,8 +9,10 @@ class Entity {
 
         this.maxSpeed = 4;
         this.maxForce = 0.20;
-        this.maxSpeed = 16;
-        this.maxForce = 0.8;
+        // this.maxSpeed = 16;
+        // this.maxForce = 0.8;
+        this.maxSpeed *= 4;
+        this.maxForce *= 4;
 
         this.navigator = new Navigator(this);
         // this.navigator.addSeek('seek', 1.5, game.input.mousePosition);
@@ -25,7 +27,7 @@ class Entity {
         this.desired = createVector(0, 0);
         this.direction = this.velocity.heading();
 
-        let shape = Renderer.SHAPES.CIRCLE;
+        let shape = Renderer.SHAPES.THIN_TRIANGLE;
         let color = createVector(204, 101, 192);
         color = createVector(127 - random(127), 100 + 127 - random(127), 200 + random(255-200));
         this.drawing = new Drawing(shape, this.size, color, this.position, this.direction);

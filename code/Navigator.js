@@ -16,6 +16,11 @@ class Navigator {
         this.desires.push({id: id_, weight: weight_, behavior: steeringBehavior_, result: createVector(0, 0), weightedResult: createVector(0, 0)});
     }
 
+    addWander(id, weight, turnStrength, turnChangeRate) {
+        let behavior = new Wander(this.entity, turnStrength, turnChangeRate);
+        this.addDesire(id, weight, behavior);
+    }
+
     addSeek(id, weight, target) {
         let behavior = new Seek(this.entity, target);
         this.addDesire(id, weight, behavior);
