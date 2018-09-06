@@ -13,7 +13,6 @@ class Wander extends SteeringBehavior {
         this.turnStrength = turnStrength;
         this.turnChangeRate = turnChangeRate;
         this.lastWander = createVector(this.entity.velocity.x, this.entity.velocity.y);
-        // this.calculate();
     }
 
     calculate() {
@@ -24,9 +23,6 @@ class Wander extends SteeringBehavior {
 
         let wander = this.constrainToWanderCircle(lastWanderWithOffset);
         this.lastWander = wander;
-        let color = createVector(255, 255, 255);
-        let alpha = 100;
-        // Renderer.drawLine(this.entity.position, p5.Vector.add(this.entity.position, wander), color, alpha);
         return wander;
     }
 
@@ -108,8 +104,9 @@ class Evade extends AbstractTargetedSteeringBehavior {
 }
 
 class Arrive extends AbstractTargetedSteeringBehavior {
-    constructor(entity, target, slowDistance) {
+    constructor(entity, target, freezeDistance, slowDistance) {
         super(entity, target);
+        this.freezeDistance = freezeDistance;
         this.slowDistance = slowDistance;
     }
 
@@ -119,9 +116,12 @@ class Arrive extends AbstractTargetedSteeringBehavior {
         if (distance >= this.slowDistance) {
             arrive.setMag(this.entity.maxSpeed);
         }
-        else {
-            let speed = map(distance, 0, this.slowDistance, 0, this.entity.maxSpeed);
+        else if (distance >= this.freezeDistance) {
+            let speed = map(distance, this.freezeDistance, this.slowDistance, 0, this.entity.maxSpeed);
             arrive.setMag(speed);
+        }
+        else {
+            arrive.setMag(0);
         }
         return arrive;
     }

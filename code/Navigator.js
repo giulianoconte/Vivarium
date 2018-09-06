@@ -31,8 +31,8 @@ class Navigator {
         this.addDesire(id, weight, behavior);
     }
 
-    addArrive(id, weight, target, slowDistance) {
-        let behavior = new Arrive(this.entity, target, slowDistance);
+    addArrive(id, weight, target, freezeDistance, slowDistance) {
+        let behavior = new Arrive(this.entity, target, freezeDistance, slowDistance);
         this.addDesire(id, weight, behavior);
     }
 

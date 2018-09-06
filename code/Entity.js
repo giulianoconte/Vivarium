@@ -9,8 +9,6 @@ class Entity {
 
         this.maxSpeed = 4;
         this.maxForce = 0.20;
-        // this.maxSpeed = 16;
-        // this.maxForce = 0.8;
         this.maxSpeed *= 4;
         this.maxForce *= 4;
 
@@ -52,9 +50,11 @@ class Entity {
     updateDrawing() {
         this.drawing.position = this.position;
         // Update direction iff speed > 0 so direction doesn't default to 0 degrees
-        if (this.velocity.mag() !== 0) {
-            this.direction = this.velocity.heading();
-        }
+        // if (this.velocity.mag() !== 0) {
+        //     this.direction = this.velocity.heading();
+        // }
+        let mouseDirection = p5.Vector.sub(this.position, game.input.mousePosition);
+        this.direction = mouseDirection.heading();
         this.drawing.rotation = this.direction;
     }
 

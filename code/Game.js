@@ -11,19 +11,23 @@ class Game {
     }
 
     initialize() {
-        let entityAmount = 9;
+        let entityAmount = 30;
         for (let i = 0; i < entityAmount; i++) {
             this.entities.push(new Entity(random(-WINDOW_CENTER_X, WINDOW_CENTER_X), random(-WINDOW_CENTER_Y, WINDOW_CENTER_Y)));
         }
         for (let i = 0; i < entityAmount; i++) {
-            this.entities[i].navigator.addWander('wander', 0.1, 50, 1);
-            this.entities[i].navigator.addPursue('pursue', 1, this.entities[(i + 1) % entityAmount], 20);
-            this.entities[i].navigator.addEvade('evade', 1, this.entities[(i + entityAmount - 1) % entityAmount], 20);
+            // this.entities[i].navigator.addWander('wander', 0.1, 50, 1);
+            // this.entities[i].navigator.addPursue('pursue', 1, this.entities[(i + 1) % entityAmount], 20);
+            // this.entities[i].navigator.addEvade('evade', 1, this.entities[(i + entityAmount - 1) % entityAmount], 20);
 
             // this.entities[i].navigator.addSeek('seek', 1, this.entities[(i + 1) % entityAmount].position);
             // this.entities[i].navigator.addFlee('flee', 1, this.entities[(i + entityAmount - 1) % entityAmount].position);
 
             // this.entities[i].navigator.addSeek('seek', 3, this.input.mousePosition);
+            
+            this.entities[i].navigator.addArrive('arrive', 2, this.input.mousePosition, 0, 200);
+            this.entities[i].navigator.addFlee('flee', 1, this.input.mousePosition);
+            this.entities[i].navigator.addStraferate('straferate', 1, this.entities, this.input.mousePosition, 100);
         }
     }
 
@@ -57,10 +61,6 @@ class Game {
     }
 
     render() {
-        // for (let i = 0; i < this.entities.length; i++) {
-        //     this.renderer.render(this.entities[i].drawing);
-        //     // this.entities[i].navigator.drawDesires();
-        // }
         for (let i = 0; i < this.entities.length; i++) {
             this.entities[i].render();
         }
