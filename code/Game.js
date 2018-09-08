@@ -11,7 +11,7 @@ class Game {
     }
 
     initialize() {
-        let entityAmount = 30;
+        let entityAmount = 50;
         for (let i = 0; i < entityAmount; i++) {
             this.entities.push(new Entity(random(-WINDOW_CENTER_X, WINDOW_CENTER_X), random(-WINDOW_CENTER_Y, WINDOW_CENTER_Y)));
         }
@@ -25,9 +25,14 @@ class Game {
 
             // this.entities[i].navigator.addSeek('seek', 3, this.input.mousePosition);
             
-            this.entities[i].navigator.addArrive('arrive', 2, this.input.mousePosition, 0, 200);
-            this.entities[i].navigator.addFlee('flee', 1, this.input.mousePosition);
-            this.entities[i].navigator.addStraferate('straferate', 1, this.entities, this.input.mousePosition, 100);
+            // this.entities[i].navigator.addArrive('arrive', 1.2, this.input.mousePosition, 0, 200);
+            // this.entities[i].navigator.addFlee('flee', 1, this.input.mousePosition);
+            // this.entities[i].navigator.addStraferate('straferate', 1, this.entities, this.input.mousePosition, 100);
+            
+            this.entities[i].navigator.addWander('wander', 0.1, 50, 0.2);
+            this.entities[i].navigator.addSeparate('separate', 3, this.entities, 30);
+            this.entities[i].navigator.addAlign('align', 1, this.entities, 50);
+            this.entities[i].navigator.addCohere('cohere', 1, this.entities, 25);
         }
     }
 
@@ -41,22 +46,6 @@ class Game {
         }
         for (let i = 0; i < this.entities.length; i++) {
             this.entities[i].update();
-            this.wraparound(this.entities[i]);
-        }
-    }
-
-    wraparound(entity) {
-        if (entity.position.x <= -1 * (WINDOW_CENTER_X + entity.drawing.size)) {
-            entity.position.x += (WINDOW_HEIGHT + entity.drawing.size);
-        }
-        if (entity.position.y <= -1 * (WINDOW_CENTER_Y + entity.drawing.size)) {
-            entity.position.y += (WINDOW_HEIGHT + entity.drawing.size);
-        }
-        if (entity.position.x >= 1 * (WINDOW_CENTER_X + entity.drawing.size)) {
-            entity.position.x -= (WINDOW_HEIGHT + entity.drawing.size);
-        }
-        if (entity.position.y >= 1 * (WINDOW_CENTER_Y + entity.drawing.size)) {
-            entity.position.y -= (WINDOW_HEIGHT + entity.drawing.size);
         }
     }
 

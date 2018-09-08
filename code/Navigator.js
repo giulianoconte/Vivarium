@@ -8,10 +8,6 @@ class Navigator {
         this.desires = [];
     }
 
-    update() {
-        let entityPositions = [];
-    }
-
     addDesire(id_, weight_, steeringBehavior_) {
         this.desires.push({id: id_, weight: weight_, behavior: steeringBehavior_, result: createVector(0, 0), weightedResult: createVector(0, 0)});
     }
@@ -127,16 +123,6 @@ class Navigator {
             this.finalResult = this.entity.velocity;
         }
         return this.finalResult;
-    }
-    
-    drawDesires() {
-        for (let i = 0; i < this.desires.length; i++) {
-            // console.log(`${this.desires[i].id}: ${this.desires[i].weightedResult}`);
-            Renderer.drawLine(this.entity.position, p5.Vector.add(this.entity.position, p5.Vector.mult(this.desires[i].weightedResult, 4)), createVector(255, 0, 0), 100);
-        }
-        // console.log(`${this.finalResult}`);
-        // console.log(`-----------`);
-        Renderer.drawLine(this.entity.position, p5.Vector.add(this.entity.position, p5.Vector.mult(this.finalResult, 8 / this.entity.maxForce)), createVector(0, 255, 0), 150);
     }
 }
 

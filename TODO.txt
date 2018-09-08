@@ -1,7 +1,13 @@
 
 Improve pursuit estimation for if pursuer has less maxSpeed
 
-implement GAIA
+
+implement AI architectures:
+    finite state machine
+        prey looks for food and sticks together
+        predator wanders for prey then attacks prey
+    behavior tree
+    GAIA
 
 look into blackboard tech
 use quadtree for finding neighbors 

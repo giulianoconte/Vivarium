@@ -9,18 +9,11 @@ class Entity {
 
         this.maxSpeed = 4;
         this.maxForce = 0.20;
-        this.maxSpeed *= 4;
-        this.maxForce *= 4;
+        this.maxSpeed *= 2;
+        this.maxForce *= 2;
 
         this.navigator = new Navigator(this);
-        // this.navigator.addSeek('seek', 1.5, game.input.mousePosition);
-        // this.navigator.addFlee('flee', 1, game.input.mousePosition);
-        // this.navigator.addArrive('arrive', 2, game.input.mousePosition, 200);
-        // this.navigator.addFreezeFlee('freezeFlee', 1, game.input.mousePosition, 80, 120);
-        // this.navigator.addSeparate('separate', 2, game.entities, 35);
-        // this.navigator.addAlign('align', 1.5, game.entities, 30);
-        // this.navigator.addCohere('cohere', 1, game.entities, 25);
-        // this.navigator.addStraferate('straferate', 1, game.entities, game.input.mousePosition, 40);
+        this.physics = new Physics(this);
 
         this.desired = createVector(0, 0);
         this.direction = this.velocity.heading();
@@ -32,9 +25,13 @@ class Entity {
     }
 
     update() {
-        this.navigator.update();
-        this.steer();
+        this.move();
         this.updateDrawing();
+    }
+
+    move() {
+        this.steer();
+        this.physics.apply();
     }
 
     steer() {
@@ -50,11 +47,9 @@ class Entity {
     updateDrawing() {
         this.drawing.position = this.position;
         // Update direction iff speed > 0 so direction doesn't default to 0 degrees
-        // if (this.velocity.mag() !== 0) {
-        //     this.direction = this.velocity.heading();
-        // }
-        let mouseDirection = p5.Vector.sub(this.position, game.input.mousePosition);
-        this.direction = mouseDirection.heading();
+        if (this.velocity.mag() !== 0) {
+            this.direction = this.velocity.heading();
+        };
         this.drawing.rotation = this.direction;
     }
 
