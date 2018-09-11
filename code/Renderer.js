@@ -116,3 +116,9 @@ Renderer.drawLine = function(a, b, color, alpha) {
     stroke(color.x, color.y, color.z, alpha);
     line(WINDOW_CENTER_X + a.x, WINDOW_CENTER_Y - a.y, WINDOW_CENTER_X + b.x, WINDOW_CENTER_Y - b.y);
 }
+
+Renderer.drawCircle = function(position, radius, color, alpha) {
+    stroke(color.x, color.y, color.z, alpha);
+    fill(color.x, color.y, color.z, alpha);
+    ellipse(WINDOW_CENTER_X + position.x, WINDOW_CENTER_Y - position.y, radius, radius);
+}

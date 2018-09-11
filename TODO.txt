@@ -1,6 +1,7 @@
 
-Improve pursuit estimation for if pursuer has less maxSpeed
+implement collision detection
 
+Improve pursuit estimation for if pursuer has less maxSpeed
 
 implement AI architectures:
     finite state machine

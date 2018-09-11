@@ -5,12 +5,12 @@ class Entity {
         this.velocity = createVector(random(3) - ((3) / 2), random(3) - ((3) / 2));
         this.position = createVector(x, y);
 
-        this.size = 15;
+        this.size = 30;
 
         this.maxSpeed = 4;
         this.maxForce = 0.20;
-        this.maxSpeed *= 2;
-        this.maxForce *= 2;
+        this.maxSpeed *= 0.3;
+        this.maxForce *= 0.03;
 
         this.navigator = new Navigator(this);
         this.physics = new Physics(this);
@@ -18,7 +18,7 @@ class Entity {
         this.desired = createVector(0, 0);
         this.direction = this.velocity.heading();
 
-        let shape = Renderer.SHAPES.THIN_TRIANGLE;
+        let shape = Renderer.SHAPES.CIRCLE;
         let color = createVector(204, 101, 192);
         color = createVector(127 - random(127), 100 + 127 - random(127), 200 + random(255-200));
         this.drawing = new Drawing(shape, this.size, color, this.position, this.direction);
@@ -26,7 +26,6 @@ class Entity {
 
     update() {
         this.move();
-        this.updateDrawing();
     }
 
     move() {
@@ -38,24 +37,28 @@ class Entity {
         this.desired = this.navigator.chooseDesiredVelocity();
         let steering = this.desired;
         steering.limit(this.maxSpeed);
+
+        // Classic steering equation: ACCELERATION = DESIRED_STEERING - CURRENT_VELOCITY
         this.acceleration = p5.Vector.sub(steering, this.velocity);
         this.acceleration.limit(this.maxForce);
         this.velocity.add(this.acceleration);
         this.position.add(this.velocity);
-    }
-
-    updateDrawing() {
-        this.drawing.position = this.position;
+        
         // Update direction iff speed > 0 so direction doesn't default to 0 degrees
         if (this.velocity.mag() !== 0) {
             this.direction = this.velocity.heading();
-        };
-        this.drawing.rotation = this.direction;
+        }
     }
 
     render() {
         // this.renderNavigation();
+        this.updateDrawing();
         game.renderer.render(this.drawing);
+    }
+
+    updateDrawing() {
+        this.drawing.position = this.position;
+        this.drawing.rotation = this.direction;
     }
 
     renderNavigation() {
