@@ -5,7 +5,10 @@ class Entity {
         this.velocity = createVector(random(3) - ((3) / 2), random(3) - ((3) / 2));
         this.position = createVector(x, y);
 
-        this.size = 30;
+        let randomNumber = random(0.5);
+        randomNumber = randomNumber * randomNumber;
+        let sizeMult = 12 * randomNumber;
+        this.size = 30 * (1 + sizeMult);
 
         this.maxSpeed = 4;
         this.maxForce = 0.20;
