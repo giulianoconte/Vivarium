@@ -1,0 +1,14 @@
+{
+  "extends": ["wesbos", "p5js", "p5js/dom"],
+  "rules": {
+    "no-console": 0,
+    "allowForLoopAfterthoughts": 0,
+    "no-plusplus": "off",
+    "no-inline-comments": "off",
+    "lines-around-comment": "off",
+    // "max-len": ["warn", { "code": 100 }],
+    "no-unused-vars": "off",
+    "no-undef": "off",
+    "max-classes-per-file": "off"
+  }
+}

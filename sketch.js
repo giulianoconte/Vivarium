@@ -8,53 +8,54 @@ The engine
 
 // the window where stuff is rendered
 let canvas;
-let WINDOW_WIDTH = 800;
-let WINDOW_HEIGHT = 800;
-let WINDOW_CENTER_X = WINDOW_WIDTH / 2;
-let WINDOW_CENTER_Y = WINDOW_HEIGHT / 2;
+const WINDOW_WIDTH = 800;
+const WINDOW_HEIGHT = 800;
+const WINDOW_CENTER_X = WINDOW_WIDTH / 2;
+const WINDOW_CENTER_Y = WINDOW_HEIGHT / 2;
 
 let game;
 let input;
 
 // p5 function: preload() is called before page starts loading
 function preload() {
-    input = new Input();
-    let renderer = new Renderer();
-    game = new Game(input, renderer);
-    game.initialize();
+  input = new Input();
+  const renderer = new Renderer();
+  game = new Game(input, renderer);
+  game.initialize();
 }
 
 // p5 function: setup() is called on page load
 function setup() {
-    canvas = createCanvas(WINDOW_WIDTH, WINDOW_HEIGHT);
-    centerCanvas();
+  frameRate(60);
+  canvas = createCanvas(WINDOW_WIDTH, WINDOW_HEIGHT);
+  centerCanvas();
 }
 
 function centerCanvas() {
-	let x = (windowWidth - width) / 2;
-	let y = (windowHeight - height) / 2;
-	canvas.position(x, y);
+  const x = (windowWidth - width) / 2;
+  const y = (windowHeight - height) / 2;
+  canvas.position(x, y);
 }
 
 function windowResized() {
-	centerCanvas();
+  centerCanvas();
 }
 
 // p5 function: draw() called on each tick
 function draw() {
-    background(25);
-    fill(0);
+  background(25);
+  fill(0);
 
-    // Game loop
-    game.getInput();
-    game.update();
-    game.render();
+  // Game loop
+  game.getInput();
+  game.update();
+  game.render();
 }
 
 function mousePressed() {
-    input.mousePress();
+  input.mousePress();
 }
 
 function mouseReleased() {
-    input.mouseRelease();
+  input.mouseRelease();
 }
