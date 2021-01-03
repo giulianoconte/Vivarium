@@ -26,8 +26,8 @@ class Entity {
     this.maxForce = 0.2;
     // this.maxSpeed *= 0.3;
     // this.maxForce *= 0.03;
-    this.maxSpeed = 2;
-    this.maxForce = 0.04;
+    this.maxSpeed = 6;
+    this.maxForce = 0.2;
 
     this.navigator = new Navigator(this);
     this.physics = new Physics(this);
@@ -77,7 +77,7 @@ class Entity {
   }
 
   render() {
-    // this.renderNavigation();
+    this.renderNavigation();
     this.updateDrawing();
     game.renderer.render(this.drawing);
   }
