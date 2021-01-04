@@ -88,13 +88,14 @@ class Entity {
   }
 
   renderNavigation() {
-    const vectorLength = this.size * 6.5;
+    const vectorLength = this.size * 1.5;
 
     for (let i = 0; i < this.navigator.desires.length; i++) {
       const component = this.navigator.desires[i];
       const componentWeightedResult = component.weightedResult;
       componentWeightedResult.setMag(
-        vectorLength / this.navigator.desires.length
+        (vectorLength / this.navigator.desires.length) *
+          mag(componentWeightedResult.x, componentWeightedResult.y)
       );
       Renderer.drawLine(
         this.position,

@@ -44,6 +44,7 @@ class Game {
     entityA.navigator.addSeparate('separate', 2.0, boundaryFlock, 60);
     this.entities.push(entityA);
     // entityB.navigator.addPursue('pursue', 0.5, entityA, 20);
+    // TODO: Why does the entity slow down when it has conflicting desire directions?
     entityB.navigator.addSeek('seek', 0.5, entityA);
     entityB.navigator.addSeparate('separate', 2.0, boundaryFlock, 60);
     this.entities.push(entityB);
@@ -59,6 +60,12 @@ class Game {
     entityZ.navigator.addWander('wander', 1.0, 15, 0.7);
     entityZ.navigator.addSeparate('separate', 50.0, boundaryFlock, 80);
     // this.entities.push(entityZ);
+    // const entityMouse = Entity.createEntity(
+    //   random(-WINDOW_CENTER_X / 2, WINDOW_CENTER_X / 2),
+    //   random(-WINDOW_CENTER_Y / 2, WINDOW_CENTER_Y / 2)
+    // );
+    // entityMouse.navigator.addSeek('seek', 1, this.input.mouse);
+    // this.entities.push(entityMouse);
 
     // Add flock of AI.
     const entityAmount = 0;

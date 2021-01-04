@@ -100,10 +100,6 @@ class AbstractTargetedSteeringBehavior extends SteeringBehavior {
 }
 
 class Seek extends AbstractTargetedSteeringBehavior {
-  constructor(entity, target) {
-    super(entity, target);
-  }
-
   calculate() {
     const seek = p5.Vector.sub(this.target.position, this.entity.position);
     seek.setMag(this.entity.maxSpeed);
@@ -112,10 +108,6 @@ class Seek extends AbstractTargetedSteeringBehavior {
 }
 
 class Flee extends AbstractTargetedSteeringBehavior {
-  constructor(entity, target) {
-    super(entity, target);
-  }
-
   calculate() {
     const flee = p5.Vector.sub(this.entity.position, this.target.position);
     flee.setMag(this.entity.maxSpeed);
@@ -136,7 +128,7 @@ class Pursue extends AbstractTargetedSteeringBehavior {
       this.target.position.x,
       this.target.position.y
     );
-    const timeUntilImpact = distance / this.target.maxSpeed;
+    const timeUntilImpact = distance / this.entity.maxSpeed;
     const estimatedPosition = p5.Vector.add(
       this.target.position,
       p5.Vector.mult(
@@ -188,10 +180,10 @@ class Arrive extends AbstractTargetedSteeringBehavior {
     const distance = dist(
       this.entity.position.x,
       this.entity.position.y,
-      this.target.x,
-      this.target.y
+      this.target.position.x,
+      this.target.position.y
     );
-    const arrive = p5.Vector.sub(this.target, this.entity.position);
+    const arrive = p5.Vector.sub(this.target.position, this.entity.position);
     if (distance >= this.slowDistance) {
       arrive.setMag(this.entity.maxSpeed);
     } else if (distance >= this.freezeDistance) {
@@ -222,10 +214,13 @@ class FreezeFlee extends AbstractTargetedSteeringBehavior {
     const distance = dist(
       this.entity.position.x,
       this.entity.position.y,
-      this.target.x,
-      this.target.y
+      this.target.position.x,
+      this.target.position.y
     );
-    const freezeFlee = p5.Vector.sub(this.entity.position, this.target);
+    const freezeFlee = p5.Vector.sub(
+      this.entity.position,
+      this.target.position
+    );
     if (distance >= this.slowDistance) {
       freezeFlee.setMag(this.entity.maxSpeed);
     } else if (distance >= this.freezeDistance) {

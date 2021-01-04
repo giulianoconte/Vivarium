@@ -103,6 +103,7 @@ class Navigator {
     return desired;
   }
 
+  // Document the pros and cons of weighted average vs weighted sum of desires.
   calculateWeightedAverage() {
     this.finalResult = createVector(0, 0);
     let totalWeight = 0;
