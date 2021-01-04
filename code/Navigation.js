@@ -1,7 +1,7 @@
-class Navigator {
+class Navigation {
   constructor(entity) {
     this.entity = entity;
-    this.calculateMode = Navigator.CALCULATE_MODES.WEIGHTED_SUM;
+    this.calculateMode = Navigation.CALCULATE_MODES.WEIGHTED_SUM;
 
     this.finalResult = createVector(0, 0);
     this.desires = [];
@@ -90,10 +90,10 @@ class Navigator {
   chooseDesiredVelocity() {
     let desired;
     switch (this.calculateMode) {
-      case Navigator.CALCULATE_MODES.WEIGHTED_SUM:
+      case Navigation.CALCULATE_MODES.WEIGHTED_SUM:
         desired = this.calculateWeightedSum();
         break;
-      case Navigator.CALCULATE_MODES.WEIGHTED_AVERAGE:
+      case Navigation.CALCULATE_MODES.WEIGHTED_AVERAGE:
         desired = this.calculateWeightedAverage();
         break;
       default:
@@ -151,7 +151,7 @@ class Navigator {
 // TODO: test that this actually is the bug with WEIGHTED_SUM e.g seek slowing down on weight less
 // than 1.
 // TODO: if above todo is true, adjust WEIGHTED_AVERAGE to do just that (or add another mode).
-Navigator.CALCULATE_MODES = Object.freeze({
+Navigation.CALCULATE_MODES = Object.freeze({
   WEIGHTED_SUM: 0,
   WEIGHTED_AVERAGE: 1,
 });

@@ -29,7 +29,7 @@ class Entity {
     this.maxSpeed = 6;
     this.maxForce = 0.2;
 
-    this.navigator = new Navigator(this);
+    this.navigation = new Navigation(this);
     this.physics = new Physics(this);
 
     this.desired = createVector(0, 0);
@@ -61,7 +61,7 @@ class Entity {
   }
 
   steer() {
-    this.desired = this.navigator.chooseDesiredVelocity();
+    this.desired = this.navigation.chooseDesiredVelocity();
     const steering = this.desired;
     steering.limit(this.maxSpeed);
 
@@ -93,11 +93,11 @@ class Entity {
   renderNavigation() {
     const vectorLength = this.size * 1.5;
 
-    for (let i = 0; i < this.navigator.desires.length; i++) {
-      const component = this.navigator.desires[i];
+    for (let i = 0; i < this.navigation.desires.length; i++) {
+      const component = this.navigation.desires[i];
       const componentWeightedResult = component.weightedResult;
       componentWeightedResult.setMag(
-        (vectorLength / this.navigator.desires.length) *
+        (vectorLength / this.navigation.desires.length) *
           mag(componentWeightedResult.x, componentWeightedResult.y)
       );
       Renderer.drawLine(
@@ -108,7 +108,7 @@ class Entity {
       );
       component.behavior.render();
     }
-    const { finalResult } = this.navigator;
+    const { finalResult } = this.navigation;
     finalResult.setMag(vectorLength);
     Renderer.drawLine(
       this.position,

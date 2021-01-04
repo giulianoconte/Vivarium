@@ -1,8 +1,26 @@
 class Button {
   constructor() {
+    // 0 means button is up, 1 means button is pressed,
+    // 2 means button is held, 3 means button is released
     this.state = 0;
-    this.isPressed = false;
-    this.isReleased = false;
+    this.pressed = false;
+    this.released = false;
+  }
+
+  isUp() {
+    return this.state === 0;
+  }
+
+  isPressed() {
+    return this.state === 1;
+  }
+
+  isHeld() {
+    return this.state === 2;
+  }
+
+  isReleased() {
+    return this.state === 3;
   }
 }
 
@@ -16,20 +34,33 @@ class Input {
       // Calculate velocity for the mouse based on last frame. This allows the mouse to be used as an entity for steering behaviors i.e Pursue.
       velocity: createVector(0, 0),
       positionInitialized: false,
-      // Click flags.
-      // 0 means button is up, 1 means button is pressed,
-      // 2 means button is held, 3 means button is released
-      leftStatus: 0,
-      isPressed: false,
-      isReleased: false,
       left: new Button(),
     };
-    this.keys = { tilda: new Button() };
+    this.keys = new Map();
+    // TODO: fix eslint config
+    // eslint-disable-next-line no-restricted-syntax
+    for (const key in Key.CODES) {
+      // https://eslint.org/docs/rules/guard-for-in
+      if ({}.hasOwnProperty.call(Key.CODES, key)) {
+        this.keys.set(Key.CODES[key], new Button());
+      }
+    }
+  }
+
+  key(keyCode) {
+    if (!this.keys.has(keyCode)) {
+      console.warn(`Attempted to lookup key ${keyCode} but found no match.`);
+      return null;
+    }
+    return this.keys.get(keyCode);
   }
 
   update() {
     this.updateMousePosition();
-    this.updateButtonStates();
+    Input.updateButtonState(this.mouse.left);
+    for (const [_, button] of this.keys.entries()) {
+      Input.updateButtonState(button);
+    }
   }
 
   updateMousePosition() {
@@ -50,50 +81,25 @@ class Input {
     }
   }
 
-  updateButtonStates() {
-    Input.updateButtonState(this.mouse.left);
-    Input.updateButtonState(this.keys.tilda);
-  }
-
-  mousePress() {
-    this.mouse.left.isPressed = true;
-  }
-
-  mouseRelease() {
-    this.mouse.left.isReleased = true;
-  }
-
-  keyPress(k, c) {
-    if (c === 192) {
-      this.keys.tilda.isPressed = true;
-    }
-  }
-
-  keyRelease(k, c) {
-    if (c === 192) {
-      this.keys.tilda.isReleased = true;
-    }
-  }
-
   static updateButtonState(button) {
     switch (button.state) {
       case 0:
-        if (button.isPressed === true) {
+        if (button.pressed === true) {
           button.state = 1;
         }
         break;
       case 1:
-        if (button.isPressed === false) {
+        if (button.pressed === false) {
           button.state = 2;
         }
         break;
       case 2:
-        if (button.isReleased === true) {
+        if (button.released === true) {
           button.state = 3;
         }
         break;
       case 3:
-        if (button.isReleased === false) {
+        if (button.released === false) {
           button.state = 0;
         }
         break;
@@ -101,7 +107,34 @@ class Input {
         button.state = 0;
         break;
     }
-    button.isPressed = false;
-    button.isReleased = false;
+    button.pressed = false;
+    button.released = false;
+  }
+
+  debugLog() {
+    for (const [key, button] of this.keys.entries()) {
+      console.log(`key ${key}: ${button.state}`);
+    }
+  }
+
+  // Methods accessed only by sketch.js to update input state.
+  mousePress() {
+    this.mouse.left.pressed = true;
+  }
+
+  mouseRelease() {
+    this.mouse.left.released = true;
+  }
+
+  keyPress(key, code) {
+    if (this.keys.has(code)) {
+      this.keys.get(code).pressed = true;
+    }
+  }
+
+  keyRelease(key, code) {
+    if (this.keys.has(code)) {
+      this.keys.get(code).released = true;
+    }
   }
 }

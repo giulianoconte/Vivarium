@@ -1,9 +1,6 @@
 
 Improve pursuit estimation for if pursuer has less maxSpeed
 
-Add input tracking for all buttons, create nice looking API to look up button state.
-    https://p5js.org/reference/#/p5/keyCode
-
 Add different scenarios to show off different behaviors:
     Needed features
         Display text
@@ -15,6 +12,9 @@ Add different scenarios to show off different behaviors:
         "Curser circle ritual" from Game.js
         Different 
         Seek vs Pursue
+            average distance from target
+            number of collisions with target
+        Flee vs Evade
             average distance from target
             number of collisions with target
 
