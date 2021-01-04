@@ -1,6 +1,25 @@
 
 Improve pursuit estimation for if pursuer has less maxSpeed
 
+Add input tracking for all buttons, create nice looking API to look up button state.
+    https://p5js.org/reference/#/p5/keyCode
+
+Add different scenarios to show off different behaviors:
+    Needed features
+        Display text
+        event pubsub to keep track of collisions for example
+        keyboard input to change scenarios
+        scenarios stored in some way, probably just functions in Game.js
+    Scenarios
+        Classic flocking and variations
+        "Curser circle ritual" from Game.js
+        Different 
+        Seek vs Pursue
+            average distance from target
+            number of collisions with target
+
+Add "Avoid" steering behavior, similar to separate but looks ahead to predict colision, and move just enough to avoid reliably. Look at Craig Reynold's for inspiration.
+
 implement AI architectures:
     finite state machine
         prey looks for food and sticks together

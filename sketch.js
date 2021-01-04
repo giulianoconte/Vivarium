@@ -59,3 +59,11 @@ function mousePressed() {
 function mouseReleased() {
   input.mouseRelease();
 }
+
+function keyPressed() {
+  input.keyPress(key, keyCode);
+}
+
+function keyReleased() {
+  input.keyRelease(key, keyCode);
+}

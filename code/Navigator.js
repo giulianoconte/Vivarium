@@ -1,7 +1,7 @@
 class Navigator {
   constructor(entity) {
     this.entity = entity;
-    this.calculateMode = Navigator.CALCULATE_MODES.WEIGHTED_AVERAGE;
+    this.calculateMode = Navigator.CALCULATE_MODES.WEIGHTED_SUM;
 
     this.finalResult = createVector(0, 0);
     this.desires = [];
@@ -146,6 +146,11 @@ class Navigator {
   }
 }
 
+// If using WEIGHTED_SUM mode, no desires should be set to weight less than 1.
+// To keep desire proportions, scale up until all are above 1.
+// TODO: test that this actually is the bug with WEIGHTED_SUM e.g seek slowing down on weight less
+// than 1.
+// TODO: if above todo is true, adjust WEIGHTED_AVERAGE to do just that (or add another mode).
 Navigator.CALCULATE_MODES = Object.freeze({
   WEIGHTED_SUM: 0,
   WEIGHTED_AVERAGE: 1,

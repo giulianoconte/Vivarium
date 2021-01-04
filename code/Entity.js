@@ -48,6 +48,7 @@ class Entity {
       this.position,
       this.direction
     );
+    this.renderNavigationFlag = false;
   }
 
   update() {
@@ -77,7 +78,9 @@ class Entity {
   }
 
   render() {
-    this.renderNavigation();
+    if (this.renderNavigationFlag === true) {
+      this.renderNavigation();
+    }
     this.updateDrawing();
     game.renderer.render(this.drawing);
   }
@@ -113,5 +116,9 @@ class Entity {
       createVector(0, 255, 0),
       100
     );
+  }
+
+  toggleNavigationRendering() {
+    this.renderNavigationFlag = !this.renderNavigationFlag;
   }
 }

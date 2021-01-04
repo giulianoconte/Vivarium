@@ -39,90 +39,104 @@ class Game {
       random(-WINDOW_CENTER_X / 2, WINDOW_CENTER_X / 2),
       random(-WINDOW_CENTER_Y / 2, WINDOW_CENTER_Y / 2)
     );
-    entityA.navigator.addWander('wander', 0.5, 15, 0.7);
+    entityA.navigator.addWander('wander', 1.0, 15, 0.7);
     entityA.maxSpeed = 4;
-    entityA.navigator.addSeparate('separate', 2.0, boundaryFlock, 60);
+    entityA.navigator.addSeparate('separate', 10.0, boundaryFlock, 60);
     this.entities.push(entityA);
-    // entityB.navigator.addPursue('pursue', 0.5, entityA, 20);
+    // entityB.navigator.addPursue('pursue', 1.0, entityA, 20);
     // TODO: Why does the entity slow down when it has conflicting desire directions?
-    entityB.navigator.addSeek('seek', 0.5, entityA);
-    entityB.navigator.addSeparate('separate', 2.0, boundaryFlock, 60);
+    entityB.navigator.addSeek('seek', 1.0, entityA);
+    entityB.navigator.addSeparate('separate', 10.0, boundaryFlock, 60);
     this.entities.push(entityB);
-    // entityC.navigator.addPursue('pursue', 0.5, entityB, 20);
-    entityC.navigator.addPursue('pursue', 0.5, entityA, 10);
-    entityC.navigator.addSeparate('separate', 2.0, boundaryFlock, 60);
+    // entityC.navigator.addPursue('pursue', 1.0, entityB, 20);
+    entityC.navigator.addPursue('pursue', 1.0, entityA, 10);
+    entityC.navigator.addSeparate('separate', 10.0, boundaryFlock, 60);
     this.entities.push(entityC);
-    const entityZ = Entity.createEntity(
-      random(-WINDOW_CENTER_X / 2, WINDOW_CENTER_X / 2),
-      random(-WINDOW_CENTER_Y / 2, WINDOW_CENTER_Y / 2)
-    );
-    // TODO: Why does wander+separate require drastic tuning? Expect wander:1 and separate:2 to be close to good enough!
-    entityZ.navigator.addWander('wander', 1.0, 15, 0.7);
-    entityZ.navigator.addSeparate('separate', 50.0, boundaryFlock, 80);
+
+    // const entityZ = Entity.createEntity(
+    //   random(-WINDOW_CENTER_X / 2, WINDOW_CENTER_X / 2),
+    //   random(-WINDOW_CENTER_Y / 2, WINDOW_CENTER_Y / 2)
+    // );
+    // // TODO: Why does wander+separate require drastic tuning? Expect wander:1 and separate:2 to be close to good enough!
+    // entityZ.navigator.addWander('wander', 1.0, 15, 0.7);
+    // entityZ.navigator.addSeparate('separate', 10.0, boundaryFlock, 120);
     // this.entities.push(entityZ);
+
     // const entityMouse = Entity.createEntity(
     //   random(-WINDOW_CENTER_X / 2, WINDOW_CENTER_X / 2),
     //   random(-WINDOW_CENTER_Y / 2, WINDOW_CENTER_Y / 2)
     // );
-    // entityMouse.navigator.addSeek('seek', 1, this.input.mouse);
+    // entityMouse.navigator.addSeek('seek', 1.0, this.input.mouse);
     // this.entities.push(entityMouse);
 
     // Add flock of AI.
-    const entityAmount = 0;
-    for (let i = 0; i < entityAmount; i++) {
-      this.entities.push(
-        Entity.createEntity(
-          random(-WINDOW_CENTER_X, WINDOW_CENTER_X),
-          random(-WINDOW_CENTER_Y, WINDOW_CENTER_Y)
-        )
+    const agentAmount = 0;
+    const agentFlock = [];
+    for (let i = 0; i < agentAmount; i++) {
+      const agent = Entity.createEntity(
+        random(-WINDOW_CENTER_X / 2, WINDOW_CENTER_X / 2),
+        random(-WINDOW_CENTER_Y / 2, WINDOW_CENTER_Y / 2)
       );
+      agentFlock.push(agent);
+      this.entities.push(agentFlock[i]);
     }
-    for (let i = 0; i < entityAmount; i++) {
+    for (let i = 0; i < agentAmount; i++) {
+      // agentFlock[i].navigator.addWander('wander', 1.0, 15, 0.7);
+
       // Epic attacking dodging
-      // this.entities[i].navigator.addWander('wander', 0.1, 50, 1);
-      // this.entities[i].navigator.addPursue(
+      // agentFlock[i].navigator.addWander('wander', 0.1, 50, 1);
+      // agentFlock[i].navigator.addPursue(
       //   'pursue',
       //   1,
-      //   this.entities[(i + 1) % entityAmount],
+      //   agentFlock[(i + 1) % agentAmount],
       //   20
       // );
-      // this.entities[i].navigator.addEvade(
+      // agentFlock[i].navigator.addEvade(
       //   'evade',
       //   1,
-      //   this.entities[(i + entityAmount - 1) % entityAmount],
+      //   agentFlock[(i + agentAmount - 1) % agentAmount],
       //   20
       // );
       //
-      // Classic flocking
-      // this.entities[i].navigator.addSeek('seek', 1, this.entities[(i + 1) % entityAmount].position);
-      // this.entities[i].navigator.addFlee('flee', 1, this.entities[(i + entityAmount - 1) % entityAmount].position);
-      // this.entities[i].navigator.addArrive('arrive', 1, this.entities[(i + 1) % entityAmount].position, 50, 5000);
+      // Movement noise
+      // agentFlock[i].navigator.addSeek(
+      //   'seek',
+      //   1,
+      //   agentFlock[(i + 1) % agentAmount]
+      // );
+      // agentFlock[i].navigator.addFlee(
+      //   'flee',
+      //   1,
+      //   agentFlock[(i + agentAmount - 1) % agentAmount]
+      // );
+      // agentFlock[i].navigator.addArrive(
+      //   'arrive',
+      //   1,
+      //   agentFlock[(i + 1) % agentAmount],
+      //   50,
+      //   5000
+      // );
       //
       // Cursor circle ritual
-      // this.entities[i].navigator.addSeek('seek', 3, this.input.mousePosition);
-      // this.entities[i].navigator.addArrive('arrive', 1.2, this.input.mousePosition, 0, 200);
-      // this.entities[i].navigator.addFlee('flee', 1, this.input.mousePosition);
-      // this.entities[i].navigator.addStraferate(
+      // agentFlock[i].navigator.addSeek('seek', 3, this.input.mouse);
+      // agentFlock[i].navigator.addArrive('arrive', 1.2, this.input.mouse, 0, 200);
+      // agentFlock[i].navigator.addFlee('flee', 1, this.input.mouse);
+      // agentFlock[i].navigator.addStraferate(
       //   'straferate',
       //   1,
       //   this.entities,
-      //   this.input.mousePosition,
+      //   this.input.mouse,
       //   100,
       // );
       //
       // Wandering flocking
-      // this.entities[i].navigator.addWander('wander', 0.1, 50, 0.2);
-      // this.entities[i].navigator.addSeparate('separate', 3, this.entities, 30);
-      // this.entities[i].navigator.addAlign('align', 1, this.entities, 50);
-      // this.entities[i].navigator.addCohere('cohere', 1, this.entities, 25);
-      //
+      // agentFlock[i].navigator.addWander('wander', 1.0, 15, 0.7);
+      // agentFlock[i].navigator.addSeparate('separate', 24, this.entities, 30);
+      // agentFlock[i].navigator.addAlign('align', 8, this.entities, 50);
+      // agentFlock[i].navigator.addCohere('cohere', 8, this.entities, 25);
+
       // Avoid boundary flock if exists.
-      // this.entities[i].navigator.addSeparate(
-      //   'separate',
-      //   1.0,
-      //   boundaryFlock,
-      //   30
-      // );
+      agentFlock[i].navigator.addSeparate('separate', 10.0, boundaryFlock, 120);
     }
   }
 
@@ -131,8 +145,14 @@ class Game {
   }
 
   update() {
-    if (this.input.mouseLeftStatus === 1) {
+    if (this.input.mouse.left.state === 1) {
       console.log('ayy');
+    }
+    if (this.input.keys.tilda.state === 1) {
+      console.log('lmao');
+      for (let i = 0; i < this.entities.length; i++) {
+        this.entities[i].toggleNavigationRendering();
+      }
     }
     for (let i = 0; i < this.entities.length; i++) {
       this.entities[i].update();

@@ -1,8 +1,13 @@
+class Button {
+  constructor() {
+    this.state = 0;
+    this.isPressed = false;
+    this.isReleased = false;
+  }
+}
+
 class Input {
   constructor() {
-    // input flags
-    // 0 means button is up, 1 means button is pressed,
-    // 2 means button is held, 3 means button is released
     this.mouse = {
       // Positional info.
       // Called position/velocity so others can use it as in target.position just like entity.position.
@@ -11,20 +16,20 @@ class Input {
       // Calculate velocity for the mouse based on last frame. This allows the mouse to be used as an entity for steering behaviors i.e Pursue.
       velocity: createVector(0, 0),
       positionInitialized: false,
-      // Click info.
+      // Click flags.
+      // 0 means button is up, 1 means button is pressed,
+      // 2 means button is held, 3 means button is released
       leftStatus: 0,
       isPressed: false,
       isReleased: false,
+      left: new Button(),
     };
-    // this.mouseLeftStatus = 0;
-    // this.mouseIsPressed = false;
-    // this.mouseIsReleased = false;
-    // this.mousePositionInitialized = false;
+    this.keys = { tilda: new Button() };
   }
 
   update() {
     this.updateMousePosition();
-    this.updateMouseLeftStatus();
+    this.updateButtonStates();
   }
 
   updateMousePosition() {
@@ -40,49 +45,63 @@ class Input {
         this.mouse.position,
         this.mouse.lastPosition
       );
-      // console.log(
-      //   `mouse.lastPosition: ${this.mouse.lastPosition}, mouse.position: ${this.mouse.position}, mouse.velocity: ${this.mouse.velocity}`
-      // );
       this.mouse.lastPosition.x = this.mouse.position.x;
       this.mouse.lastPosition.y = this.mouse.position.y;
     }
   }
 
-  updateMouseLeftStatus() {
-    switch (this.mouse.leftStatus) {
-      case 0:
-        if (this.mouse.isPressed === true) {
-          this.mouse.leftStatus = 1;
-        }
-        break;
-      case 1:
-        if (this.mouse.isPressed === false) {
-          this.mouse.leftStatus = 2;
-        }
-        break;
-      case 2:
-        if (this.mouse.isReleased === true) {
-          this.mouse.leftStatus = 3;
-        }
-        break;
-      case 3:
-        if (this.mouse.isReleased === false) {
-          this.mouse.leftStatus = 0;
-        }
-        break;
-      default:
-        this.mouse.leftStatus = 0;
-        break;
-    }
-    this.mouse.isPressed = false;
-    this.mouse.isReleased = false;
+  updateButtonStates() {
+    Input.updateButtonState(this.mouse.left);
+    Input.updateButtonState(this.keys.tilda);
   }
 
   mousePress() {
-    this.mouse.isPressed = true;
+    this.mouse.left.isPressed = true;
   }
 
   mouseRelease() {
-    this.mouse.isReleased = true;
+    this.mouse.left.isReleased = true;
+  }
+
+  keyPress(k, c) {
+    if (c === 192) {
+      this.keys.tilda.isPressed = true;
+    }
+  }
+
+  keyRelease(k, c) {
+    if (c === 192) {
+      this.keys.tilda.isReleased = true;
+    }
+  }
+
+  static updateButtonState(button) {
+    switch (button.state) {
+      case 0:
+        if (button.isPressed === true) {
+          button.state = 1;
+        }
+        break;
+      case 1:
+        if (button.isPressed === false) {
+          button.state = 2;
+        }
+        break;
+      case 2:
+        if (button.isReleased === true) {
+          button.state = 3;
+        }
+        break;
+      case 3:
+        if (button.isReleased === false) {
+          button.state = 0;
+        }
+        break;
+      default:
+        button.state = 0;
+        break;
+    }
+    button.isPressed = false;
+    button.isReleased = false;
   }
 }
