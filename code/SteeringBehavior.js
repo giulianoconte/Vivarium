@@ -380,7 +380,7 @@ class Straferate extends AbstractFlockingSteeringBehavior {
       );
 
       const toReferencePoint = p5.Vector.sub(
-        this.referencePoint,
+        this.referencePoint.position,
         this.entity.position
       );
       const toTarget = p5.Vector.sub(

@@ -1,24 +1,31 @@
 
 Improve pursuit estimation for if pursuer has less maxSpeed
 
+Scenarios:
+    Set entity stats differently based on scenarios
+    Give scenario access to
+    UI instructions for changing scenarios
+
 Add different scenarios to show off different behaviors:
     Needed features
         Display text
         event pubsub to keep track of collisions for example
-        keyboard input to change scenarios
-        scenarios stored in some way, probably just functions in Game.js
     Scenarios
         Classic flocking and variations
         "Curser circle ritual" from Game.js
-        Different 
         Seek vs Pursue
             average distance from target
             number of collisions with target
         Flee vs Evade
             average distance from target
             number of collisions with target
+        Arrive freezing entities around mouse cursor
+
+Fix super long navigation desire rendering
 
 Add "Avoid" steering behavior, similar to separate but looks ahead to predict colision, and move just enough to avoid reliably. Look at Craig Reynold's for inspiration.
+
+physics collision detection from metanet: https://www.metanetsoftware.com/technique/tutorialA.html
 
 implement AI architectures:
     finite state machine
@@ -31,5 +38,3 @@ look into blackboard tech
 use quadtree for finding neighbors 
     http://www.mikechambers.com/blog/2011/03/21/javascript-quadtree-implementation/ 
     https://gamedevelopment.tutsplus.com/tutorials/quick-tip-use-quadtrees-to-detect-likely-collisions-in-2d-space--gamedev-374
-
-physics collision detection from metanet: https://www.metanetsoftware.com/technique/tutorialA.html
