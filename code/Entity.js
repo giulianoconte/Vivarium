@@ -51,6 +51,19 @@ class Entity {
     this.renderNavigationFlag = false;
   }
 
+  setSize(size) {
+    this.size = size;
+    const { color, shape } = this.drawing;
+    // TODO: does old drawing get removed from memory?
+    this.drawing = new Drawing(
+      shape,
+      this.size,
+      color,
+      this.position,
+      this.direction
+    );
+  }
+
   update() {
     this.move();
   }

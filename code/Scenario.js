@@ -14,6 +14,10 @@ class Scenario {
         this.gs.clear();
         this.flocking2();
         break;
+      case Scenario.SCENARIOS.FLOCKING_OBSTACLES:
+        this.gs.clear();
+        this.flockingObstacles();
+        break;
       case Scenario.SCENARIOS.SEEK_PURSUE:
         this.gs.clear();
         this.seekPursue();
@@ -51,8 +55,8 @@ class Scenario {
     const agentFlock = [];
     for (let i = 0; i < agentAmount; i++) {
       const agent = Entity.createEntity(
-        random(-WINDOW_CENTER_X / 2, WINDOW_CENTER_X / 2),
-        random(-WINDOW_CENTER_Y / 2, WINDOW_CENTER_Y / 2)
+        random(-WINDOW_CENTER_X, WINDOW_CENTER_X),
+        random(-WINDOW_CENTER_Y, WINDOW_CENTER_Y)
       );
       agentFlock.push(agent);
       this.entities.push(agentFlock[i]);
@@ -116,6 +120,56 @@ class Scenario {
         10.0,
         boundaryFlock,
         120
+      );
+    }
+  }
+
+  flockingObstacles() {
+    // Create boundary flock to keep entities within.
+    const entityBoundaryAmount = 5;
+    let theta = 0;
+    const boundaryFlock = [];
+    for (let i = 0; i < entityBoundaryAmount; i++) {
+      theta += (2 * PI) / entityBoundaryAmount;
+      const newEntityX = cos(theta) * WINDOW_CENTER_X * 0.9;
+      const newEntityY = sin(theta) * WINDOW_CENTER_Y * 0.9;
+      const newEntity = Entity.createEntityWithShape(
+        newEntityX,
+        newEntityY,
+        Renderer.SHAPES.CIRCLE
+      );
+      newEntity.velocity = createVector(random(3) - 3 / 2, random(3) - 3 / 2);
+      newEntity.setSize(65);
+      boundaryFlock.push(newEntity);
+      this.entities.push(boundaryFlock[i]);
+    }
+
+    // Add flock of AI.
+    const agentAmount = 80;
+    const agentFlock = [];
+    for (let i = 0; i < agentAmount; i++) {
+      const agent = Entity.createEntity(
+        random(-WINDOW_CENTER_X, WINDOW_CENTER_X),
+        random(-WINDOW_CENTER_Y, WINDOW_CENTER_Y)
+      );
+      agent.maxSpeed = 4;
+      agent.maxForce = 0.2;
+      agentFlock.push(agent);
+      this.entities.push(agentFlock[i]);
+    }
+    for (let i = 0; i < agentAmount; i++) {
+      // Wandering flocking
+      agentFlock[i].navigation.addWander('wander', 1.0, 15, 0.7);
+      agentFlock[i].navigation.addSeparate('separate', 24, this.entities, 30);
+      agentFlock[i].navigation.addAlign('align', 8, this.entities, 50);
+      agentFlock[i].navigation.addCohere('cohere', 8, this.entities, 25);
+
+      // Avoid boundary flock if exists.
+      agentFlock[i].navigation.addSeparate(
+        'separate',
+        12.0,
+        boundaryFlock,
+        480
       );
     }
   }
@@ -374,6 +428,7 @@ class Scenario {
 Scenario.SCENARIOS = Object.freeze({
   FLOCKING_1: 0,
   FLOCKING_2: 1,
-  SEEK_PURSUE: 2,
-  CIRCLE_RITUAL: 3,
+  FLOCKING_OBSTACLES: 2,
+  SEEK_PURSUE: 3,
+  CIRCLE_RITUAL: 4,
 });

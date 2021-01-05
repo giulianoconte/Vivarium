@@ -1,3 +1,4 @@
+BUG: flockingObstacles scenario: hit 5 then hit ` to show nav rendering and see the big circles speed up permanently.
 
 Improve pursuit estimation for if pursuer has less maxSpeed
 
@@ -11,7 +12,10 @@ Add different scenarios to show off different behaviors:
         Display text
         event pubsub to keep track of collisions for example
     Scenarios
-        Classic flocking and variations
+        Classic flocking
+            within circle
+            with predators
+            with moving obstacles
         "Curser circle ritual" from Game.js
         Seek vs Pursue
             average distance from target

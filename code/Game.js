@@ -36,6 +36,9 @@ class Game {
     if (this.input.key(Key.CODES.D_4).isPressed()) {
       this.scenario.set(Scenario.SCENARIOS.CIRCLE_RITUAL);
     }
+    if (this.input.key(Key.CODES.D_5).isPressed()) {
+      this.scenario.set(Scenario.SCENARIOS.FLOCKING_OBSTACLES);
+    }
     if (this.input.mouse.left.isPressed()) {
       console.log('ayy');
     }

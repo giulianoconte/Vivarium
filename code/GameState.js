@@ -11,6 +11,5 @@ class GameState {
       this.entities.pop();
       n++;
     }
-    console.log(`removed ${n} entities`);
   }
 }
