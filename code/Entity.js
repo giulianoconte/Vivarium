@@ -121,7 +121,7 @@ class Entity {
       );
       component.behavior.render();
     }
-    const { finalResult } = this.navigation;
+    const finalResult = this.navigation.finalResult.copy();
     finalResult.setMag(vectorLength);
     Renderer.drawLine(
       this.position,

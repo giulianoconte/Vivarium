@@ -1,5 +1,3 @@
-BUG: flockingObstacles scenario: hit 5 then hit ` to show nav rendering and see the big circles speed up permanently.
-
 Improve pursuit estimation for if pursuer has less maxSpeed
 
 Scenarios:

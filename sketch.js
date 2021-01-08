@@ -24,17 +24,17 @@ function preload() {
   game.initialize();
 }
 
+function centerCanvas() {
+  const x = (windowWidth - width) / 2;
+  const y = (windowHeight - height) / 2;
+  canvas.position(x, y);
+}
+
 // p5 function: setup() is called on page load
 function setup() {
   frameRate(60);
   canvas = createCanvas(WINDOW_WIDTH, WINDOW_HEIGHT);
   centerCanvas();
-}
-
-function centerCanvas() {
-  const x = (windowWidth - width) / 2;
-  const y = (windowHeight - height) / 2;
-  canvas.position(x, y);
 }
 
 function windowResized() {
