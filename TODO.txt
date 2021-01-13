@@ -1,5 +1,7 @@
 Improve pursuit estimation for if pursuer has less maxSpeed
 
+Bug: classic flocking scenario averages right, why?
+
 Scenarios:
     Set entity stats differently based on scenarios
     Give scenario access to
