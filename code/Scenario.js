@@ -38,8 +38,6 @@ class Scenario {
 
   test1() {
     console.log(`hello: ${this.gs.entities.length}`);
-    // textSize(32);
-    // text('word', 10, 30);
   }
 
   flocking1() {
@@ -68,6 +66,8 @@ class Scenario {
         random(-WINDOW_CENTER_X, WINDOW_CENTER_X),
         random(-WINDOW_CENTER_Y, WINDOW_CENTER_Y)
       );
+      agent.maxSpeed = 4;
+      agent.maxForce = 0.12;
       agentFlock.push(agent);
       this.entities.push(agentFlock[i]);
     }
@@ -114,6 +114,8 @@ class Scenario {
         random(-WINDOW_CENTER_X / 2, WINDOW_CENTER_X / 2),
         random(-WINDOW_CENTER_Y / 2, WINDOW_CENTER_Y / 2)
       );
+      agent.maxSpeed = 4;
+      agent.maxForce = 0.12;
       agentFlock.push(agent);
       this.entities.push(agentFlock[i]);
     }
