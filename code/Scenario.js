@@ -6,6 +6,10 @@ class Scenario {
 
   set(scenario) {
     switch (scenario) {
+      case Scenario.SCENARIOS.TEST_1:
+        this.gs.clear();
+        this.test1();
+        break;
       case Scenario.SCENARIOS.FLOCKING_1:
         this.gs.clear();
         this.flocking1();
@@ -30,6 +34,12 @@ class Scenario {
         console.warn(`Could not find scenario matching ${scenario}`);
         break;
     }
+  }
+
+  test1() {
+    console.log(`hello: ${this.gs.entities.length}`);
+    // textSize(32);
+    // text('word', 10, 30);
   }
 
   flocking1() {
@@ -431,4 +441,5 @@ Scenario.SCENARIOS = Object.freeze({
   FLOCKING_OBSTACLES: 2,
   SEEK_PURSUE: 3,
   CIRCLE_RITUAL: 4,
+  TEST_1: 101,
 });

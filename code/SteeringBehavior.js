@@ -41,13 +41,7 @@ class Wander extends SteeringBehavior {
       this.getRelativeWanderCircle(),
       wanderFromOriginRotatedForHeading
     );
-    // Update rendering info.
-    this.renders.wanderPoint = p5.Vector.add(
-      this.getWanderCirclePosition(),
-      wanderFromOriginRotatedForHeading
-    );
-    this.renders.wanderCircleCenter = this.getWanderCirclePosition();
-    this.renders.wanderCircleRadius = this.turnStrength;
+    this.updateRenderInfo(wanderFromOriginRotatedForHeading);
     this.lastTheta = newTheta;
     return wander;
   }
@@ -63,6 +57,15 @@ class Wander extends SteeringBehavior {
 
   getWanderCirclePosition() {
     return p5.Vector.add(this.getRelativeWanderCircle(), this.entity.position);
+  }
+
+  updateRenderInfo(wanderPoint) {
+    this.renders.wanderPoint = p5.Vector.add(
+      this.getWanderCirclePosition(),
+      wanderPoint
+    );
+    this.renders.wanderCircleCenter = this.getWanderCirclePosition();
+    this.renders.wanderCircleRadius = this.turnStrength;
   }
 
   // TODO: rendering for steering behaviors
@@ -115,10 +118,17 @@ class Flee extends AbstractTargetedSteeringBehavior {
   }
 }
 
+class PursueRenders {
+  constructor(estimation) {
+    this.estimation = estimation;
+  }
+}
+
 class Pursue extends AbstractTargetedSteeringBehavior {
   constructor(entity, target, maxEstimationTime) {
     super(entity, target);
     this.maxEstimationTime = maxEstimationTime;
+    this.renders = new PursueRenders(createVector(0, 0));
   }
 
   calculate() {
@@ -138,7 +148,17 @@ class Pursue extends AbstractTargetedSteeringBehavior {
     );
     const pursue = p5.Vector.sub(estimatedPosition, this.entity.position);
     pursue.setMag(this.entity.maxSpeed);
+    this.renders.estimation = estimatedPosition.copy();
     return pursue;
+  }
+
+  render() {
+    Renderer.drawCircle(
+      this.renders.estimation,
+      3,
+      createVector(255, 255, 0),
+      80
+    );
   }
 }
 

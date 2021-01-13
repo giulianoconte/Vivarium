@@ -22,7 +22,7 @@ class Game {
 
   update() {
     if (this.input.key(Key.CODES.D_0).isPressed()) {
-      this.scenario.set(Scenario.SCENARIOS.SEEK_PURSUE);
+      this.scenario.set(Scenario.SCENARIOS.TEST_1);
     }
     if (this.input.key(Key.CODES.D_1).isPressed()) {
       this.scenario.set(Scenario.SCENARIOS.FLOCKING_1);
