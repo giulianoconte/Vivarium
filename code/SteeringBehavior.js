@@ -41,8 +41,9 @@ class Wander extends SteeringBehavior {
       this.getRelativeWanderCircle(),
       wanderFromOriginRotatedForHeading
     );
-    this.updateRenderInfo(wanderFromOriginRotatedForHeading);
     this.lastTheta = newTheta;
+
+    this.updateRenderInfo(wanderFromOriginRotatedForHeading);
     return wander;
   }
 
@@ -68,7 +69,6 @@ class Wander extends SteeringBehavior {
     this.renders.wanderCircleRadius = this.turnStrength;
   }
 
-  // TODO: rendering for steering behaviors
   render() {
     super.render();
     Renderer.drawCircle(
@@ -118,9 +118,9 @@ class Flee extends AbstractTargetedSteeringBehavior {
   }
 }
 
-class PursueRenders {
-  constructor(estimation) {
-    this.estimation = estimation;
+class TargetRenders {
+  constructor(target) {
+    this.target = target;
   }
 }
 
@@ -128,7 +128,7 @@ class Pursue extends AbstractTargetedSteeringBehavior {
   constructor(entity, target, maxEstimationTime) {
     super(entity, target);
     this.maxEstimationTime = maxEstimationTime;
-    this.renders = new PursueRenders(createVector(0, 0));
+    this.renders = new TargetRenders(createVector(0, 0));
   }
 
   calculate() {
@@ -148,17 +148,13 @@ class Pursue extends AbstractTargetedSteeringBehavior {
     );
     const pursue = p5.Vector.sub(estimatedPosition, this.entity.position);
     pursue.setMag(this.entity.maxSpeed);
-    this.renders.estimation = estimatedPosition.copy();
+
+    this.renders.target = estimatedPosition.copy();
     return pursue;
   }
 
   render() {
-    Renderer.drawCircle(
-      this.renders.estimation,
-      3,
-      createVector(255, 255, 0),
-      80
-    );
+    Renderer.drawCircle(this.renders.target, 3, createVector(255, 255, 0), 80);
   }
 }
 
@@ -166,6 +162,7 @@ class Evade extends AbstractTargetedSteeringBehavior {
   constructor(entity, target, maxEstimationTime) {
     super(entity, target);
     this.maxEstimationTime = maxEstimationTime;
+    this.renders = new TargetRenders(createVector(0, 0));
   }
 
   calculate() {
@@ -185,7 +182,13 @@ class Evade extends AbstractTargetedSteeringBehavior {
     );
     const evade = p5.Vector.sub(this.entity.position, estimatedPosition);
     evade.setMag(this.entity.maxSpeed);
+
+    this.renders.target = estimatedPosition.copy();
     return evade;
+  }
+
+  render() {
+    Renderer.drawCircle(this.renders.target, 3, createVector(255, 0, 255), 80);
   }
 }
 
